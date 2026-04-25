@@ -68,7 +68,7 @@ public class SteeringAgent : MonoBehaviour
         _velocity = desiredVelocity;
 
         _rb.linearVelocity = new Vector3(_velocity.x, _rb.linearVelocity.y, _velocity.z);
-                
+
         Vector3 dirToTarget = _target.position - transform.position;
         dirToTarget.y = 0;
 
@@ -81,4 +81,46 @@ public class SteeringAgent : MonoBehaviour
         Vector3 euler = transform.eulerAngles;
         transform.rotation = Quaternion.Euler(0, euler.y, 0);
     }
+    
+
+    public void MoveAwayFromTarget()
+    {
+        if (_target == null) return;
+
+        Vector3 desiredVelocity =
+            (transform.position - _target.position).normalized * maxSpeed;
+
+        if (desiredVelocity.magnitude < 0.05f)
+        {
+            _velocity = -transform.forward * 0.1f;
+            desiredVelocity = _velocity;
+        }
+
+        if (_avoidance.TryGetAvoidDir(desiredVelocity, out Vector3 avoidDir))
+        {
+            desiredVelocity = avoidDir * maxSpeed;
+        }
+
+        _velocity = desiredVelocity;
+
+        _rb.linearVelocity =
+            new Vector3(_velocity.x, _rb.linearVelocity.y, _velocity.z);
+
+        Vector3 lookDir = -_velocity;
+        lookDir.y = 0;
+
+        if (lookDir.magnitude > 0.2f)
+        {
+            Quaternion rot =
+                Quaternion.LookRotation(lookDir.normalized);
+
+            transform.rotation =
+                Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
+        }
+
+        Vector3 euler = transform.eulerAngles;
+        transform.rotation = Quaternion.Euler(0, euler.y, 0);
+    }
+
+
 }

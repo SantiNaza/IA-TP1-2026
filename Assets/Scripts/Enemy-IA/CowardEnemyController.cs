@@ -1,27 +1,30 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Enemigo cobarde basado en tu EnemyController actual.
+// Usa SteeringAgent igual que el enemigo normal.
 public class CowardEnemyController : MonoBehaviour
 {
     [Header("References")]
     public Transform target;
     public LineOfSight los;
     public Transform[] waypoints;
+    public SteeringAgent steeringAgent;
+
+    private Transform _currentSteeringTarget;
 
     [Header("Movement")]
-    public float speed = 3f;
     public float waypointReachDistance = 0.5f;
     public float attackRange = 1.5f;
-
-    [Header("Run Away")]
     public float trappedDistance = 2f;
-    public float obstacleCheckDistance = 1.5f;
 
     [Header("Idle")]
     public float idleTime = 2f;
 
     private int _currentWaypointIndex = 0;
     private int _direction = 1;
+
+    private float idleTimer;
 
     private enum State
     {
@@ -32,7 +35,6 @@ public class CowardEnemyController : MonoBehaviour
     }
 
     private State currentState;
-    private float idleTimer;
 
     void Start()
     {
@@ -63,9 +65,9 @@ public class CowardEnemyController : MonoBehaviour
         DetectPlayer();
     }
 
-    // ===================================================
-    // DETECCION
-    // ===================================================
+    // ==================================================
+    // DETECCIÓN
+    // ==================================================
     void DetectPlayer()
     {
         if (target == null || los == null) return;
@@ -77,19 +79,31 @@ public class CowardEnemyController : MonoBehaviour
         }
     }
 
-    // ===================================================
-    // PATROL
-    // ===================================================
+    // ==================================================
+    // PATROL (igual a tu EnemyController)
+    // ==================================================
     void Patrol()
     {
-        if (waypoints.Length == 0) return;
+        if (waypoints == null || waypoints.Length == 0) return;
 
         Transform wp = waypoints[_currentWaypointIndex];
 
-        float dist = Vector3.Distance(transform.position, wp.position);
+        Vector3 dir = wp.position - transform.position;
+        dir.y = 0;
 
-        if (dist <= waypointReachDistance)
+        if (dir.magnitude < waypointReachDistance)
         {
+            steeringAgent.Stop();
+
+            currentState = State.Idle;
+            idleTimer = idleTime;
+
+            Vector3 lookDir = wp.position - transform.position;
+            lookDir.y = 0;
+
+            if (lookDir.sqrMagnitude > 0.01f)
+                transform.forward = lookDir.normalized;
+
             _currentWaypointIndex += _direction;
 
             if (_currentWaypointIndex >= waypoints.Length)
@@ -103,20 +117,21 @@ public class CowardEnemyController : MonoBehaviour
                 _currentWaypointIndex = 1;
             }
 
-            currentState = State.Idle;
-            idleTimer = idleTime;
             return;
         }
 
-        Vector3 dir = SteeringBehaviours.Seek(transform, wp.position, speed);
-        dir += SteeringBehaviours.ObstacleAvoidance(transform);
+        if (_currentSteeringTarget != wp)
+        {
+            _currentSteeringTarget = wp;
+            steeringAgent.SetTarget(wp);
+        }
 
-        Move(dir);
+        steeringAgent.MoveToTarget(true);
     }
 
-    // ===================================================
+    // ==================================================
     // IDLE
-    // ===================================================
+    // ==================================================
     void Idle()
     {
         idleTimer -= Time.deltaTime;
@@ -125,34 +140,34 @@ public class CowardEnemyController : MonoBehaviour
             currentState = State.Patrol;
     }
 
-    // ===================================================
+    // ==================================================
     // RUN AWAY
-    // ===================================================
+    // ==================================================
     void RunAway()
     {
-        Vector3 dir = SteeringBehaviours.Evade(transform, target, speed);
-        dir += SteeringBehaviours.ObstacleAvoidance(transform);
+        if (target == null) return;
 
-        Move(dir);
+        steeringAgent.SetTarget(target);
+        steeringAgent.MoveAwayFromTarget();
 
         float dist = Vector3.Distance(transform.position, target.position);
 
-        // Si no puede escapar o jugador muy cerca => atacar
-        if (dist < trappedDistance || IsBlocked())
+        // si queda acorralado o muy cerca
+        if (dist <= trappedDistance || IsBlocked())
         {
             currentState = State.Attack;
         }
     }
 
-    // ===================================================
+    // ==================================================
     // ATTACK
-    // ===================================================
+    // ==================================================
     void Attack()
     {
-        Vector3 dir = SteeringBehaviours.Pursuit(transform, target, speed);
-        dir += SteeringBehaviours.ObstacleAvoidance(transform);
+        if (target == null) return;
 
-        Move(dir);
+        steeringAgent.SetTarget(target);
+        steeringAgent.MoveToTarget(false);
 
         float dist = Vector3.Distance(transform.position, target.position);
 
@@ -167,28 +182,15 @@ public class CowardEnemyController : MonoBehaviour
         }
     }
 
-    // ===================================================
-    // MOVIMIENTO
-    // ===================================================
-    void Move(Vector3 dir)
-    {
-        dir.y = 0;
-        dir = dir.normalized;
-
-        transform.position += dir * speed * Time.deltaTime;
-
-        if (dir != Vector3.zero)
-            transform.forward = dir;
-    }
-
-    // ===================================================
-    // BLOQUEADO
-    // ===================================================
+    // ==================================================
+    // DETECTA SI HAY PARED ADELANTE
+    // ==================================================
     bool IsBlocked()
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleCheckDistance))
+        if (Physics.Raycast(transform.position + Vector3.up * 0.5f,
+            transform.forward, out hit, 1.5f))
         {
             if (!hit.collider.CompareTag("Player"))
                 return true;
@@ -197,9 +199,9 @@ public class CowardEnemyController : MonoBehaviour
         return false;
     }
 
-    // ===================================================
+    // ==================================================
     // GAME OVER
-    // ===================================================
+    // ==================================================
     void GameOver()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

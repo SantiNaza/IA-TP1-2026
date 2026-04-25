@@ -7,6 +7,8 @@ public class EnemyController : MonoBehaviour
     public Transform target;
     public LineOfSight los;
     public Transform[] waypoints;
+    public SteeringAgent steeringAgent;
+    private Transform _currentSteeringTarget;
 
     [Header("Movement")]
     public float speed = 3f;
@@ -31,6 +33,8 @@ public class EnemyController : MonoBehaviour
         _fsm.OnUpdate();
     }
 
+
+    // Se arma la FSM del enemigo y se conectan las transiciones entre estados. 
     void InitializeFSM()
     {
         var patrol = new EnemyPatrolState(this);
@@ -52,7 +56,7 @@ public class EnemyController : MonoBehaviour
         _fsm = new FSM<EnemyStateEnum>(patrol);
     }
 
-    // Patrulla recorriendo waypoints ida y vuelta.
+    // Patrulla recorriendo waypoints ida y vuelta. Si llega a un waypoint entra en Idle.
     public void Patrol()
     {
         if (waypoints == null || waypoints.Length == 0) return;
@@ -64,10 +68,16 @@ public class EnemyController : MonoBehaviour
 
         if (dir.magnitude < waypointReachDistance)
         {
-            // Cada vez que llega a un waypoint, pasa a Idle
+            steeringAgent.Stop();
+
             TransitionTo(EnemyStateEnum.Idle);
 
-            // Cambia el índice para el próximo waypoint (ida y vuelta)
+            Vector3 lookDir = wp.position - transform.position;
+            lookDir.y = 0;
+
+            if (lookDir.sqrMagnitude > 0.01f)
+                transform.forward = lookDir.normalized;
+
             _currentWaypointIndex += _direction;
 
             if (_currentWaypointIndex >= waypoints.Length)
@@ -84,17 +94,22 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-        Move(dir);
+        if (_currentSteeringTarget != wp)
+        {
+            _currentSteeringTarget = wp;
+            steeringAgent.SetTarget(wp);
+        }
+
+        steeringAgent.MoveToTarget(true);
     }
 
+    // Si el enemigo esta en Chase, usa steering para perseguir al jugador.
     public void ChaseTarget()
     {
         if (target == null) return;
 
-        Vector3 dir = target.position - transform.position;
-        dir.y = 0;
-
-        Move(dir);
+        steeringAgent.SetTarget(target);
+        steeringAgent.MoveToTarget(false);
     }
 
     public void Move(Vector3 dir)

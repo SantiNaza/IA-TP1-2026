@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Enemigo cobarde basado en tu EnemyController actual.
-// Usa SteeringAgent igual que el enemigo normal.
 public class CowardEnemyController : MonoBehaviour
 {
     [Header("References")]
@@ -10,6 +8,7 @@ public class CowardEnemyController : MonoBehaviour
     public LineOfSight los;
     public Transform[] waypoints;
     public SteeringAgent steeringAgent;
+    public CowardDecisionTree decisionTree;
 
     private Transform _currentSteeringTarget;
 
@@ -23,10 +22,9 @@ public class CowardEnemyController : MonoBehaviour
 
     private int _currentWaypointIndex = 0;
     private int _direction = 1;
-
     private float idleTimer;
 
-    private enum State
+    public enum State
     {
         Patrol,
         Idle,
@@ -34,15 +32,24 @@ public class CowardEnemyController : MonoBehaviour
         Attack
     }
 
-    private State currentState;
+    public State currentState;
 
     void Start()
     {
         currentState = State.Patrol;
+
+        if (decisionTree != null)
+            decisionTree.enemy = this;
     }
 
     void Update()
     {
+        // Si no está idle, decide constantemente
+        if (currentState != State.Idle && decisionTree != null)
+        {
+            currentState = decisionTree.Decide();
+        }
+
         switch (currentState)
         {
             case State.Patrol:
@@ -61,26 +68,10 @@ public class CowardEnemyController : MonoBehaviour
                 Attack();
                 break;
         }
-
-        DetectPlayer();
     }
 
     // ==================================================
-    // DETECCIÓN
-    // ==================================================
-    void DetectPlayer()
-    {
-        if (target == null || los == null) return;
-
-        if (los.CanSeeTarget(target))
-        {
-            if (currentState == State.Patrol || currentState == State.Idle)
-                currentState = State.RunAway;
-        }
-    }
-
-    // ==================================================
-    // PATROL (igual a tu EnemyController)
+    // PATROL
     // ==================================================
     void Patrol()
     {
@@ -149,14 +140,6 @@ public class CowardEnemyController : MonoBehaviour
 
         steeringAgent.SetTarget(target);
         steeringAgent.MoveAwayFromTarget();
-
-        float dist = Vector3.Distance(transform.position, target.position);
-
-        // si queda acorralado o muy cerca
-        if (dist <= trappedDistance || IsBlocked())
-        {
-            currentState = State.Attack;
-        }
     }
 
     // ==================================================
@@ -169,23 +152,28 @@ public class CowardEnemyController : MonoBehaviour
         steeringAgent.SetTarget(target);
         steeringAgent.MoveToTarget(false);
 
-        float dist = Vector3.Distance(transform.position, target.position);
-
-        if (dist <= attackRange)
+        if (DistanceToTarget() <= attackRange)
         {
             GameOver();
-        }
-
-        if (!los.CanSeeTarget(target))
-        {
-            currentState = State.Patrol;
         }
     }
 
     // ==================================================
-    // DETECTA SI HAY PARED ADELANTE
+    // MÉTODOS USADOS POR DECISION TREE
     // ==================================================
-    bool IsBlocked()
+    public bool CanSeeTarget()
+    {
+        if (los == null || target == null) return false;
+        return los.CanSeeTarget(target);
+    }
+
+    public float DistanceToTarget()
+    {
+        if (target == null) return Mathf.Infinity;
+        return Vector3.Distance(transform.position, target.position);
+    }
+
+    public bool IsBlocked()
     {
         RaycastHit hit;
 

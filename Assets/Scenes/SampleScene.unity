@@ -1026,6 +1026,7 @@ GameObject:
   - component: {fileID: 440193270}
   - component: {fileID: 440193269}
   - component: {fileID: 440193268}
+  - component: {fileID: 440193274}
   m_Layer: 0
   m_Name: Coward
   m_TagString: Untagged
@@ -1088,10 +1089,12 @@ MonoBehaviour:
   - {fileID: 196111675}
   - {fileID: 855020295}
   steeringAgent: {fileID: 440193268}
+  decisionTree: {fileID: 440193274}
   waypointReachDistance: 0.5
   attackRange: 1.5
   trappedDistance: 2
   idleTime: 2
+  currentState: 0
 --- !u!136 &440193270
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1199,6 +1202,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &440193274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440193266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b9a7cb730c83b4d8fc07865605ab5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CowardDecisionTree
+  enemy: {fileID: 440193269}
 --- !u!1 &442670893
 GameObject:
   m_ObjectHideFlags: 0

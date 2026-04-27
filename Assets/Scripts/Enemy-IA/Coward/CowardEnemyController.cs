@@ -20,60 +20,53 @@ public class CowardEnemyController : MonoBehaviour
     [Header("Idle")]
     public float idleTime = 2f;
 
+    private FSM<CowardStateEnum> _fsm;
+
     private int _currentWaypointIndex = 0;
     private int _direction = 1;
-    private float idleTimer;
 
-    public enum State
+    private void Start()
     {
-        Patrol,
-        Idle,
-        RunAway,
-        Attack
-    }
-
-    public State currentState;
-
-    void Start()
-    {
-        currentState = State.Patrol;
+        InitializeFSM();
 
         if (decisionTree != null)
             decisionTree.enemy = this;
     }
 
-    void Update()
+    private void Update()
     {
-        // Si no está idle, decide constantemente
-        if (currentState != State.Idle && decisionTree != null)
-        {
-            currentState = decisionTree.Decide();
-        }
+        _fsm.OnUpdate();
 
-        switch (currentState)
-        {
-            case State.Patrol:
-                Patrol();
-                break;
+        if (_fsm.CurrentStateId == CowardStateEnum.Idle) return;
+        if (decisionTree == null) return;
 
-            case State.Idle:
-                Idle();
-                break;
+        CowardStateEnum decision = decisionTree.Decide();
 
-            case State.RunAway:
-                RunAway();
-                break;
-
-            case State.Attack:
-                Attack();
-                break;
-        }
+        if (decision != _fsm.CurrentStateId)
+            _fsm.Transition(decision);
     }
 
-    // ==================================================
-    // PATROL
-    // ==================================================
-    void Patrol()
+    private void InitializeFSM()
+    {
+        var patrol = new CowardPatrolState(this);
+        var idle = new CowardIdleState(this);
+        var runAway = new CowardRunAwayState(this);
+        var attack = new CowardAttackState(this);
+
+        patrol.AddTransition(CowardStateEnum.Idle, idle);
+        patrol.AddTransition(CowardStateEnum.RunAway, runAway);
+
+        idle.AddTransition(CowardStateEnum.Patrol, patrol);
+
+        runAway.AddTransition(CowardStateEnum.Patrol, patrol);
+        runAway.AddTransition(CowardStateEnum.Attack, attack);
+
+        attack.AddTransition(CowardStateEnum.Patrol, patrol);
+
+        _fsm = new FSM<CowardStateEnum>(patrol, CowardStateEnum.Patrol);
+    }
+
+    public void Patrol()
     {
         if (waypoints == null || waypoints.Length == 0) return;
 
@@ -85,9 +78,7 @@ public class CowardEnemyController : MonoBehaviour
         if (dir.magnitude < waypointReachDistance)
         {
             steeringAgent.Stop();
-
-            currentState = State.Idle;
-            idleTimer = idleTime;
+            TransitionTo(CowardStateEnum.Idle);
 
             Vector3 lookDir = wp.position - transform.position;
             lookDir.y = 0;
@@ -108,6 +99,7 @@ public class CowardEnemyController : MonoBehaviour
                 _currentWaypointIndex = 1;
             }
 
+            _currentSteeringTarget = null;
             return;
         }
 
@@ -120,21 +112,7 @@ public class CowardEnemyController : MonoBehaviour
         steeringAgent.MoveToTarget(true);
     }
 
-    // ==================================================
-    // IDLE
-    // ==================================================
-    void Idle()
-    {
-        idleTimer -= Time.deltaTime;
-
-        if (idleTimer <= 0)
-            currentState = State.Patrol;
-    }
-
-    // ==================================================
-    // RUN AWAY
-    // ==================================================
-    void RunAway()
+    public void RunAway()
     {
         if (target == null) return;
 
@@ -142,10 +120,7 @@ public class CowardEnemyController : MonoBehaviour
         steeringAgent.MoveAwayFromTarget();
     }
 
-    // ==================================================
-    // ATTACK
-    // ==================================================
-    void Attack()
+    public void Attack()
     {
         if (target == null) return;
 
@@ -153,14 +128,9 @@ public class CowardEnemyController : MonoBehaviour
         steeringAgent.MoveToTarget(false);
 
         if (DistanceToTarget() <= attackRange)
-        {
             GameOver();
-        }
     }
 
-    // ==================================================
-    // MÉTODOS USADOS POR DECISION TREE
-    // ==================================================
     public bool CanSeeTarget()
     {
         if (los == null || target == null) return false;
@@ -187,10 +157,12 @@ public class CowardEnemyController : MonoBehaviour
         return false;
     }
 
-    // ==================================================
-    // GAME OVER
-    // ==================================================
-    void GameOver()
+    public void TransitionTo(CowardStateEnum state)
+    {
+        _fsm.Transition(state);
+    }
+
+    private void GameOver()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

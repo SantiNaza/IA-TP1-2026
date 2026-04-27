@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class EnemyIdleState : State<EnemyStateEnum> 
+public class GuardIdleState : State<GuardStateEnum> 
 { 
-    private EnemyController _enemy;
+    private GuardEnemyController _enemy;
     private float _timer;
-    public EnemyIdleState(EnemyController enemy) { _enemy = enemy; }
+    public GuardIdleState(GuardEnemyController enemy) { _enemy = enemy; }
     
     
     public override void Enter()
@@ -17,14 +17,14 @@ public class EnemyIdleState : State<EnemyStateEnum>
     { 
         if (_enemy.CanSeeTarget()) 
         {
-            _enemy.TransitionTo(EnemyStateEnum.Chase);
+            _enemy.TransitionTo(GuardStateEnum.Chase);
             return; 
         }
         _timer += Time.deltaTime; 
         // Cuando cumple el tiempo, vuelve a Patrol 
         if (_timer >= _enemy.idleTime)
         { 
-            _enemy.TransitionTo(EnemyStateEnum.Patrol);
+            _enemy.TransitionTo(GuardStateEnum.Patrol);
         }
     }
 }

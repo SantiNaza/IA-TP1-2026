@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class EnemyAttackState : State<EnemyStateEnum>
+public class GuardAttackState : State<GuardStateEnum>
 {
-    private EnemyController _enemy;
+    private GuardEnemyController _enemy;
 
-    public EnemyAttackState(EnemyController enemy)
+    public GuardAttackState(GuardEnemyController enemy)
     {
         _enemy = enemy;
     }

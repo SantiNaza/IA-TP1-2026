@@ -1090,11 +1090,10 @@ MonoBehaviour:
   - {fileID: 855020295}
   steeringAgent: {fileID: 440193268}
   decisionTree: {fileID: 440193274}
-  waypointReachDistance: 0.5
-  attackRange: 1.5
-  trappedDistance: 2
+  waypointReachDistance: 1.2
+  attackRange: 1.2
+  trappedDistance: 2.5
   idleTime: 2
-  currentState: 0
 --- !u!136 &440193270
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1200,7 +1199,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &440193274
 MonoBehaviour:
@@ -1918,6 +1917,7 @@ GameObject:
   - component: {fileID: 595608513}
   - component: {fileID: 595608512}
   - component: {fileID: 595608518}
+  - component: {fileID: 595608519}
   m_Layer: 0
   m_Name: Guard
   m_TagString: Untagged
@@ -1944,7 +1944,7 @@ MonoBehaviour:
   - {fileID: 502178279}
   - {fileID: 1735648445}
   steeringAgent: {fileID: 595608518}
-  speed: 2.5
+  decisionTree: {fileID: 595608519}
   waypointReachDistance: 1.2
   attackRange: 1.2
   idleTime: 1.5
@@ -2090,6 +2090,19 @@ MonoBehaviour:
     m_Bits: 64
   avoidanceRadius: 2
   avoidanceAngle: 70
+--- !u!114 &595608519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595608511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3aaa0ed49669ec4d951bb8a02471fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardDecisionTree
+  enemy: {fileID: 595608512}
 --- !u!1 &609629565
 GameObject:
   m_ObjectHideFlags: 0
@@ -3593,6 +3606,7 @@ GameObject:
   - component: {fileID: 1298678261}
   - component: {fileID: 1298678260}
   - component: {fileID: 1298678265}
+  - component: {fileID: 1298678266}
   m_Layer: 0
   m_Name: Guard3
   m_TagString: Untagged
@@ -3635,7 +3649,7 @@ MonoBehaviour:
   - {fileID: 1904563955}
   - {fileID: 451315608}
   steeringAgent: {fileID: 1298678265}
-  speed: 2.5
+  decisionTree: {fileID: 1298678266}
   waypointReachDistance: 1.2
   attackRange: 1.2
   idleTime: 2
@@ -3765,6 +3779,19 @@ MonoBehaviour:
     m_Bits: 64
   avoidanceRadius: 2
   avoidanceAngle: 70
+--- !u!114 &1298678266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298678258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3aaa0ed49669ec4d951bb8a02471fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardDecisionTree
+  enemy: {fileID: 1298678260}
 --- !u!1 &1369133889
 GameObject:
   m_ObjectHideFlags: 0
@@ -4811,6 +4838,7 @@ GameObject:
   - component: {fileID: 1828052903}
   - component: {fileID: 1828052902}
   - component: {fileID: 1828052907}
+  - component: {fileID: 1828052908}
   m_Layer: 0
   m_Name: Guard2
   m_TagString: Untagged
@@ -4853,7 +4881,7 @@ MonoBehaviour:
   - {fileID: 190081005}
   - {fileID: 479680698}
   steeringAgent: {fileID: 1828052907}
-  speed: 2.5
+  decisionTree: {fileID: 1828052908}
   waypointReachDistance: 1.2
   attackRange: 1.2
   idleTime: 1
@@ -4983,6 +5011,19 @@ MonoBehaviour:
     m_Bits: 64
   avoidanceRadius: 2
   avoidanceAngle: 70
+--- !u!114 &1828052908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828052900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3aaa0ed49669ec4d951bb8a02471fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardDecisionTree
+  enemy: {fileID: 1828052902}
 --- !u!1 &1839350280
 GameObject:
   m_ObjectHideFlags: 0

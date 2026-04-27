@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class EnemyChaseState : State<EnemyStateEnum>
+public class GuardChaseState : State<GuardStateEnum>
 {
-    private EnemyController _enemy;
+    private GuardEnemyController _enemy;
 
-    public EnemyChaseState(EnemyController enemy)
+    public GuardChaseState(GuardEnemyController enemy)
     {
         _enemy = enemy;
     }
@@ -14,14 +14,14 @@ public class EnemyChaseState : State<EnemyStateEnum>
         // Si pierde al jugador, vuelve a patrullar.
         if (!_enemy.CanSeeTarget())
         {
-            _enemy.TransitionTo(EnemyStateEnum.Patrol);
+            _enemy.TransitionTo(GuardStateEnum.Patrol);
             return;
         }
 
         // Si el jugador esta cerca, lo agarro y perdio.
         if (_enemy.DistanceToTarget() <= _enemy.attackRange)
         {
-            _enemy.TransitionTo(EnemyStateEnum.Attack);
+            _enemy.TransitionTo(GuardStateEnum.Attack);
             return;
         }
 

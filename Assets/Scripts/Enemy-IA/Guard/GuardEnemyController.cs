@@ -1,62 +1,75 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class EnemyController : MonoBehaviour
+public class GuardEnemyController : MonoBehaviour
 {
     [Header("References")]
     public Transform target;
     public LineOfSight los;
     public Transform[] waypoints;
     public SteeringAgent steeringAgent;
+    public GuardDecisionTree decisionTree;
+
     private Transform _currentSteeringTarget;
 
     [Header("Movement")]
-    public float speed = 3f;
     public float waypointReachDistance = 0.5f;
     public float attackRange = 1.2f;
 
     [Header("Idle")]
     public float idleTime = 2f;
 
-    private FSM<EnemyStateEnum> _fsm;
+    private FSM<GuardStateEnum> _fsm;
 
     private int _currentWaypointIndex = 0;
-    private int _direction = 1; // 1 = va hacia adelante, -1 = vuelve
+    private int _direction = 1;
 
     private void Start()
     {
         InitializeFSM();
+
+        if (decisionTree != null)
+            decisionTree.enemy = this;
     }
 
     private void Update()
     {
         _fsm.OnUpdate();
+
+        if (decisionTree == null) return;
+
+        GuardStateEnum decision = decisionTree.Decide();
+
+        // Interviene solo si hay jugador detectado
+        if (decision == GuardStateEnum.Chase || decision == GuardStateEnum.Attack)
+        {
+            // evita re-transiciones innecesarias
+            if (decision != _fsm.CurrentStateId)
+                TransitionTo(decision);
+        }
     }
 
-
-    // Se arma la FSM del enemigo y se conectan las transiciones entre estados. 
     void InitializeFSM()
     {
-        var patrol = new EnemyPatrolState(this);
-        var idle = new EnemyIdleState(this);
-        var chase = new EnemyChaseState(this);
-        var attack = new EnemyAttackState(this);
+        var patrol = new GuardPatrolState(this);
+        var idle = new GuardIdleState(this);
+        var chase = new GuardChaseState(this);
+        var attack = new GuardAttackState(this);
 
-        patrol.AddTransition(EnemyStateEnum.Idle, idle);
-        patrol.AddTransition(EnemyStateEnum.Chase, chase);
+        patrol.AddTransition(GuardStateEnum.Idle, idle);
+        patrol.AddTransition(GuardStateEnum.Chase, chase);
 
-        idle.AddTransition(EnemyStateEnum.Patrol, patrol);
-        idle.AddTransition(EnemyStateEnum.Chase, chase);
+        idle.AddTransition(GuardStateEnum.Patrol, patrol);
+        idle.AddTransition(GuardStateEnum.Chase, chase);
 
-        chase.AddTransition(EnemyStateEnum.Patrol, patrol);
-        chase.AddTransition(EnemyStateEnum.Attack, attack);
+        chase.AddTransition(GuardStateEnum.Patrol, patrol);
+        chase.AddTransition(GuardStateEnum.Attack, attack);
 
-        attack.AddTransition(EnemyStateEnum.Patrol, patrol);
+        attack.AddTransition(GuardStateEnum.Patrol, patrol);
 
-        _fsm = new FSM<EnemyStateEnum>(patrol);
+        _fsm = new FSM<GuardStateEnum>(patrol, GuardStateEnum.Patrol);
     }
 
-    // Patrulla recorriendo waypoints ida y vuelta. Si llega a un waypoint entra en Idle.
     public void Patrol()
     {
         if (waypoints == null || waypoints.Length == 0) return;
@@ -68,9 +81,10 @@ public class EnemyController : MonoBehaviour
 
         if (dir.magnitude < waypointReachDistance)
         {
-            steeringAgent.Stop();
+            if (steeringAgent != null)
+                steeringAgent.Stop();
 
-            TransitionTo(EnemyStateEnum.Idle);
+            TransitionTo(GuardStateEnum.Idle);
 
             Vector3 lookDir = wp.position - transform.position;
             lookDir.y = 0;
@@ -91,35 +105,28 @@ public class EnemyController : MonoBehaviour
                 _currentWaypointIndex = 1;
             }
 
+            _currentSteeringTarget = null;
             return;
         }
 
-        if (_currentSteeringTarget != wp)
+        if (steeringAgent != null)
         {
-            _currentSteeringTarget = wp;
-            steeringAgent.SetTarget(wp);
-        }
+            if (_currentSteeringTarget != wp)
+            {
+                _currentSteeringTarget = wp;
+                steeringAgent.SetTarget(wp);
+            }
 
-        steeringAgent.MoveToTarget(true);
+            steeringAgent.MoveToTarget(true);
+        }
     }
 
-    // Si el enemigo esta en Chase, usa steering para perseguir al jugador.
     public void ChaseTarget()
     {
-        if (target == null) return;
+        if (target == null || steeringAgent == null) return;
 
         steeringAgent.SetTarget(target);
         steeringAgent.MoveToTarget(false);
-    }
-
-    public void Move(Vector3 dir)
-    {
-        dir = dir.normalized;
-
-        transform.position += dir * speed * Time.deltaTime;
-
-        if (dir != Vector3.zero)
-            transform.forward = dir;
     }
 
     public bool CanSeeTarget()
@@ -134,7 +141,7 @@ public class EnemyController : MonoBehaviour
         return Vector3.Distance(transform.position, target.position);
     }
 
-    public void TransitionTo(EnemyStateEnum state)
+    public void TransitionTo(GuardStateEnum state)
     {
         _fsm.Transition(state);
     }

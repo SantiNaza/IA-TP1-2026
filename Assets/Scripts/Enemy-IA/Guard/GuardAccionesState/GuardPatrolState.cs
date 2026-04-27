@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class EnemyPatrolState : State<EnemyStateEnum>
+public class GuardPatrolState : State<GuardStateEnum>
 {
-    private EnemyController _enemy;
+    private GuardEnemyController _enemy;
 
-    public EnemyPatrolState(EnemyController enemy)
+    public GuardPatrolState(GuardEnemyController enemy)
     {
         _enemy = enemy;
     }
@@ -14,7 +14,7 @@ public class EnemyPatrolState : State<EnemyStateEnum>
         //Patrulla waypoints hasta que ve al jugador.
         if (_enemy.CanSeeTarget())
         {
-            _enemy.TransitionTo(EnemyStateEnum.Chase);
+            _enemy.TransitionTo(GuardStateEnum.Chase);
             return;
         }
 

@@ -29,6 +29,7 @@ public class GuardEnemyController : MonoBehaviour
     private bool skipNextRoulette = false;
     private bool isWaiting = false;
 
+
     private void Start()
     {
         InitializeFSM();
@@ -50,6 +51,7 @@ public class GuardEnemyController : MonoBehaviour
             if (decision != _fsm.CurrentStateId)
                 TransitionTo(decision);
         }
+
     }
 
     void InitializeFSM()
@@ -72,6 +74,7 @@ public class GuardEnemyController : MonoBehaviour
 
         _fsm = new FSM<GuardStateEnum>(patrol, GuardStateEnum.Patrol);
     }
+
 
     public void Patrol()
     {
@@ -216,4 +219,10 @@ public class GuardEnemyController : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public string GetCurrentState()
+    {
+        return _fsm.CurrentStateId.ToString();
+    }
+
 }

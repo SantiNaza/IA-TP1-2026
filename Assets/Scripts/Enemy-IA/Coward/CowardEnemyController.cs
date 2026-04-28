@@ -25,6 +25,7 @@ public class CowardEnemyController : MonoBehaviour
     private int _currentWaypointIndex = 0;
     private int _direction = 1;
 
+
     private void Start()
     {
         InitializeFSM();
@@ -44,6 +45,7 @@ public class CowardEnemyController : MonoBehaviour
 
         if (decision != _fsm.CurrentStateId)
             _fsm.Transition(decision);
+
     }
 
     private void InitializeFSM()
@@ -65,6 +67,7 @@ public class CowardEnemyController : MonoBehaviour
 
         _fsm = new FSM<CowardStateEnum>(patrol, CowardStateEnum.Patrol);
     }
+
 
     public void Patrol()
     {
@@ -165,5 +168,10 @@ public class CowardEnemyController : MonoBehaviour
     private void GameOver()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public string GetCurrentState()
+    {
+        return _fsm.CurrentStateId.ToString();
     }
 }

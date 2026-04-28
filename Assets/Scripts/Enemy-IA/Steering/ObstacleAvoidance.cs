@@ -8,6 +8,8 @@ public class ObstacleAvoidance
     LayerMask _obsMask;
     Collider[] _colls;
 
+    int _lastSide = 1; 
+
     public ObstacleAvoidance(Transform entity, float radius, float angle, LayerMask obsMask, int maxObs = 10)
     {
         _entity = entity;
@@ -24,7 +26,7 @@ public class ObstacleAvoidance
         if (currDir == Vector3.zero)
             currDir = _entity.forward;
 
-        // Detecta obstaculos cerca dentro del radio y el angulo (como un cono de vision)
+        // Detecta obstaculos cerca dentro del radio y el angulo (como un cono de vision
         int count = Physics.OverlapSphereNonAlloc(_entity.position, _radius, _colls, _obsMask);
 
         Collider nearColl = null;
@@ -62,8 +64,11 @@ public class ObstacleAvoidance
 
         // Elege izq o der segun donde este el obstaculo.
         Vector3 local = _entity.InverseTransformPoint(nearPoint);
-        if (local.x < 0)
-            avoidDir = -avoidDir;
+
+        if (Mathf.Abs(local.x) > 0.05f)
+            _lastSide = (local.x < 0) ? -1 : 1;
+
+        avoidDir *= _lastSide;
 
         return true;
     }

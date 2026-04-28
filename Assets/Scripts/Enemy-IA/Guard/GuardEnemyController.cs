@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +25,10 @@ public class GuardEnemyController : MonoBehaviour
     private int _currentWaypointIndex = 0;
     private int _direction = 1;
 
+    private int _lastRouletteResult = -1;
+    private bool skipNextRoulette = false;
+    private bool isWaiting = false;
+
     private void Start()
     {
         InitializeFSM();
@@ -34,18 +39,21 @@ public class GuardEnemyController : MonoBehaviour
 
     private void Update()
     {
-        _fsm.OnUpdate();
-
-        if (decisionTree == null) return;
-
-        GuardStateEnum decision = decisionTree.Decide();
-
-        // Interviene solo si hay jugador detectado
-        if (decision == GuardStateEnum.Chase || decision == GuardStateEnum.Attack)
+        // Cuando isWaiting es verdadero, detenemos la FSM y cualquier decisión
+        // Esto asegura que el enemigo permanezca quieto durante unos segundos
+        if (!isWaiting)
         {
-            // evita re-transiciones innecesarias
-            if (decision != _fsm.CurrentStateId)
-                TransitionTo(decision);
+            _fsm.OnUpdate();
+
+            if (decisionTree == null) return;
+
+            GuardStateEnum decision = decisionTree.Decide();
+
+            if (decision == GuardStateEnum.Chase || decision == GuardStateEnum.Attack)
+            {
+                if (decision != _fsm.CurrentStateId)
+                    TransitionTo(decision);
+            }
         }
     }
 
@@ -70,6 +78,7 @@ public class GuardEnemyController : MonoBehaviour
         _fsm = new FSM<GuardStateEnum>(patrol, GuardStateEnum.Patrol);
     }
 
+    //ruleta 
     public void Patrol()
     {
         if (waypoints == null || waypoints.Length == 0) return;
@@ -84,25 +93,46 @@ public class GuardEnemyController : MonoBehaviour
             if (steeringAgent != null)
                 steeringAgent.Stop();
 
-            TransitionTo(GuardStateEnum.Idle);
-
             Vector3 lookDir = wp.position - transform.position;
             lookDir.y = 0;
 
             if (lookDir.sqrMagnitude > 0.01f)
                 transform.forward = lookDir.normalized;
 
-            _currentWaypointIndex += _direction;
-
-            if (_currentWaypointIndex >= waypoints.Length)
+            // Si el resultado anterior fue ForwardTwo, saltamos la ruleta una vez y avanzamos solo 1 waypoint normal
+            if (skipNextRoulette)
             {
-                _direction = -1;
-                _currentWaypointIndex = waypoints.Length - 2;
+                skipNextRoulette = false;
+                _currentWaypointIndex += _direction;
+                ClampWaypointIndex();
+                _currentSteeringTarget = null;
+                return;
             }
-            else if (_currentWaypointIndex < 0)
+
+            Debug.Log($"GuardEnemyController: entered waypoint, rolling roulette at index {_currentWaypointIndex}", this);
+            int result = RollRoulette();
+
+            switch (result)
             {
-                _direction = 1;
-                _currentWaypointIndex = 1;
+                case 0:
+                    Debug.Log("Roulette result 0: WAIT for 5 seconds.", this);
+                    TransitionTo(GuardStateEnum.Idle);
+                    StartCoroutine(WaitAndContinue(5f));
+                    break;
+
+                case 1:
+                    Debug.Log("Roulette result 1: move back one waypoint.", this);
+                    _direction = -_direction;
+                    _currentWaypointIndex += _direction;
+                    ClampWaypointIndex();
+                    break;
+
+                case 2:
+                    Debug.Log("Roulette result 2: move forward exactly two waypoints.", this);
+                    _currentWaypointIndex += _direction * 2;
+                    ClampWaypointIndex();
+                    skipNextRoulette = true;
+                    break;
             }
 
             _currentSteeringTarget = null;
@@ -118,6 +148,62 @@ public class GuardEnemyController : MonoBehaviour
             }
 
             steeringAgent.MoveToTarget(true);
+        }
+    }
+
+    // Coroutine: espera el tiempo, avanza 1 waypoint normal y reanuda la FSM
+    IEnumerator WaitAndContinue(float time)
+    {
+        // Marca que estamos en el modo de espera y evita que Update siga ejecutando estados.
+        Debug.Log("WaitAndContinue: waiting started.", this);
+        isWaiting = true;
+
+        if (steeringAgent != null)
+            steeringAgent.Stop();
+
+        yield return new WaitForSeconds(time);
+
+        Debug.Log("WaitAndContinue: waiting finished.", this);
+
+        // Avanza un waypoint normal al terminar la espera
+        _currentWaypointIndex += _direction;
+        ClampWaypointIndex();
+        _currentSteeringTarget = null;
+
+        isWaiting = false;
+        TransitionTo(GuardStateEnum.Patrol);
+    }
+
+    // Retorna 0, 1 o 2, evitando dos WAIT seguidos para dar más variación.
+    int RollRoulette()
+    {
+        int result = Random.Range(0, 3);
+
+        if (_lastRouletteResult == 0 && result == 0)
+        {
+            // Si el resultado anterior fue WAIT, forzamos un 1 o 2 para no repetirlo.
+            result = Random.Range(1, 3);
+            Debug.Log("RollRoulette: repeated WAIT avoided, choosing 1 or 2.", this);
+        }
+
+        _lastRouletteResult = result;
+        return result;
+    }
+
+    // Evita que el índice salga del array y ajusta la dirección en los extremos.
+    void ClampWaypointIndex()
+    {
+        if (waypoints == null || waypoints.Length == 0) return;
+
+        if (_currentWaypointIndex >= waypoints.Length)
+        {
+            _currentWaypointIndex = waypoints.Length - 1;
+            _direction = -1;
+        }
+        else if (_currentWaypointIndex < 0)
+        {
+            _currentWaypointIndex = 0;
+            _direction = 1;
         }
     }
 

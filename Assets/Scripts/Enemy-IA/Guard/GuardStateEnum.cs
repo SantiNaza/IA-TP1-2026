@@ -6,5 +6,6 @@ public enum GuardStateEnum
     Patrol,
     Idle,
     Chase,
+    Pathfinding,
     Attack
 }

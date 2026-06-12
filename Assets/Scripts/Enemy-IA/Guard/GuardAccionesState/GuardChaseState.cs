@@ -11,10 +11,12 @@ public class GuardChaseState : State<GuardStateEnum>
 
     public override void Execute()
     {
-        // Si pierde al jugador, vuelve a patrullar.
+        // pathfinding si no veo al jugador, sino lo persigo. Si lo pierdo, busco por el ultimo lugar donde lo vi.
         if (!_enemy.CanSeeTarget())
         {
-            _enemy.TransitionTo(GuardStateEnum.Patrol);
+            _enemy.TransitionTo(
+                GuardStateEnum.Pathfinding);
+
             return;
         }
 

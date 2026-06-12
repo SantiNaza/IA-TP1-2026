@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,6 +29,15 @@ public class GuardEnemyController : MonoBehaviour
 
     private bool skipNextRoulette = false;
     private bool isWaiting = false;
+
+    public Vector3 LastKnownPlayerPosition;
+
+    [Header("Pathfinding")]
+    public NavWaypoint[] navigationWaypoints;
+
+    private List<NavWaypoint> currentPath = new List<NavWaypoint>();
+
+    private int currentPathIndex;
 
 
     private void Start()
@@ -59,6 +69,7 @@ public class GuardEnemyController : MonoBehaviour
         var patrol = new GuardPatrolState(this);
         var idle = new GuardIdleState(this);
         var chase = new GuardChaseState(this);
+        var pathfinding = new GuardPathfindingState(this);
         var attack = new GuardAttackState(this);
 
         patrol.AddTransition(GuardStateEnum.Idle, idle);
@@ -67,14 +78,16 @@ public class GuardEnemyController : MonoBehaviour
         idle.AddTransition(GuardStateEnum.Patrol, patrol);
         idle.AddTransition(GuardStateEnum.Chase, chase);
 
-        chase.AddTransition(GuardStateEnum.Patrol, patrol);
+        chase.AddTransition(GuardStateEnum.Pathfinding, pathfinding);
         chase.AddTransition(GuardStateEnum.Attack, attack);
+
+        pathfinding.AddTransition(GuardStateEnum.Chase, chase);
+        pathfinding.AddTransition(GuardStateEnum.Patrol, patrol);
 
         attack.AddTransition(GuardStateEnum.Patrol, patrol);
 
         _fsm = new FSM<GuardStateEnum>(patrol, GuardStateEnum.Patrol);
     }
-
 
     public void Patrol()
     {
@@ -194,6 +207,8 @@ public class GuardEnemyController : MonoBehaviour
     {
         if (target == null || steeringAgent == null) return;
 
+        LastKnownPlayerPosition = target.position;
+
         steeringAgent.SetTarget(target);
         steeringAgent.MoveToTarget(false);
     }
@@ -225,4 +240,68 @@ public class GuardEnemyController : MonoBehaviour
         return _fsm.CurrentStateId.ToString();
     }
 
+    public NavWaypoint GetClosestWaypoint(Vector3 position)
+    {
+        NavWaypoint closest = null;
+
+        float closestDistance = Mathf.Infinity;
+
+        foreach (NavWaypoint wp in navigationWaypoints)
+        {
+            float distance =
+                Vector3.Distance(position, wp.transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = wp;
+            }
+        }
+
+        return closest;
+    }
+
+    public void CalculatePath()
+    {
+        NavWaypoint start =
+            GetClosestWaypoint(transform.position);
+
+        NavWaypoint end =
+            GetClosestWaypoint(LastKnownPlayerPosition);
+
+        currentPath =
+            WaypointPathfinding.FindPath(start, end);
+
+        currentPathIndex = 0;
+    }
+
+    public void FollowPath()
+    {
+        if (currentPath == null)
+            return;
+
+        if (currentPathIndex >= currentPath.Count)
+            return;
+
+        NavWaypoint currentNode =
+            currentPath[currentPathIndex];
+
+        steeringAgent.SetTarget(currentNode.transform);
+        steeringAgent.MoveToTarget(true);
+
+        float distance =
+            Vector3.Distance(
+                transform.position,
+                currentNode.transform.position);
+
+        if (distance < waypointReachDistance)
+        {
+            currentPathIndex++;
+        }
+    }
+
+    public bool PathFinished()
+    {
+        return currentPathIndex >= currentPath.Count;
+    }
 }

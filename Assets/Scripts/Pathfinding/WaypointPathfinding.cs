@@ -3,46 +3,85 @@ using UnityEngine;
 
 public static class WaypointPathfinding
 {
-    public static List<NavWaypoint> FindPath(
-        NavWaypoint start,
-        NavWaypoint goal)
+    public static List<NavWaypoint> FindPath(NavWaypoint start,NavWaypoint goal)
     {
-        Queue<NavWaypoint> frontier = new Queue<NavWaypoint>();
+        List<NavWaypoint> openSet = new List<NavWaypoint>();
 
-        Dictionary<NavWaypoint, NavWaypoint> cameFrom =
-            new Dictionary<NavWaypoint, NavWaypoint>();
+        Dictionary<NavWaypoint, NavWaypoint> cameFrom = new Dictionary<NavWaypoint, NavWaypoint>();
 
-        frontier.Enqueue(start);
-        cameFrom[start] = null;
+        Dictionary<NavWaypoint, float> gScore = new Dictionary<NavWaypoint, float>();
 
-        while (frontier.Count > 0)
+        Dictionary<NavWaypoint, float> fScore = new Dictionary<NavWaypoint, float>();
+
+        openSet.Add(start);
+
+        gScore[start] = 0;
+
+        fScore[start] = Heuristic(start, goal);
+
+        while (openSet.Count > 0)
         {
-            NavWaypoint current = frontier.Dequeue();
+            NavWaypoint current = GetLowestFScore(openSet, fScore);
 
             if (current == goal)
-                break;
+                return ReconstructPath(cameFrom, current);
 
-            foreach (NavWaypoint next in current.neighbors)
+            openSet.Remove(current);
+
+            foreach (NavWaypoint neighbor in current.neighbors)
             {
-                if (cameFrom.ContainsKey(next))
-                    continue;
+                float tentativeG = gScore[current] + current.CostTo(neighbor);
 
-                frontier.Enqueue(next);
-                cameFrom[next] = current;
+                if (!gScore.ContainsKey(neighbor) || tentativeG < gScore[neighbor])
+                {
+                    cameFrom[neighbor] = current;
+
+                    gScore[neighbor] = tentativeG;
+
+                    fScore[neighbor] = tentativeG + Heuristic(neighbor, goal);
+
+                    if (!openSet.Contains(neighbor))
+                        openSet.Add(neighbor);
+                }
             }
         }
 
+        return new List<NavWaypoint>();
+    }
+
+    static float Heuristic( NavWaypoint a, NavWaypoint b)
+    {
+        return Vector3.Distance( a.transform.position, b.transform.position);
+    }
+
+    static NavWaypoint GetLowestFScore( List<NavWaypoint> openSet, Dictionary<NavWaypoint, float> fScore)
+    {
+        NavWaypoint best = openSet[0];
+
+        float bestScore = fScore[best];
+
+        foreach (NavWaypoint node in openSet)
+        {
+            if (fScore[node] < bestScore)
+            {
+                best = node;
+                bestScore = fScore[node];
+            }
+        }
+
+        return best;
+    }
+
+    static List<NavWaypoint> ReconstructPath( Dictionary<NavWaypoint, NavWaypoint> cameFrom, NavWaypoint current)
+    {
         List<NavWaypoint> path = new List<NavWaypoint>();
 
-        if (!cameFrom.ContainsKey(goal))
-            return path;
+        path.Add(current);
 
-        NavWaypoint currentNode = goal;
-
-        while (currentNode != null)
+        while (cameFrom.ContainsKey(current))
         {
-            path.Add(currentNode);
-            currentNode = cameFrom[currentNode];
+            current = cameFrom[current];
+            path.Add(current);
         }
 
         path.Reverse();

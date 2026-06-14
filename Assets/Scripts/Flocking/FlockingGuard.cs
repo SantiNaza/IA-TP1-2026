@@ -25,7 +25,7 @@ public class FlockingGuard : MonoBehaviour
 
     [Header("Native Obstacle Avoidance")]
     public LayerMask obstacleMask;
-    public float avoidanceRadius = 4f; // Distancia de visión de la pared
+    public float avoidanceRadius = 4f; // Distancia de vision de la pared
     public float avoidanceWeight = 15f; // Tiene que ser muy alto para dominar a la bandada
 
     private Vector3 velocity;
@@ -38,11 +38,9 @@ public class FlockingGuard : MonoBehaviour
         Vector3 alignment = CalculateAlignment();
         Vector3 cohesion = CalculateCohesion();
         Vector3 separation = CalculateSeparation();
-        Vector3 avoidance = CalculateObstacleAvoidance(); // Nueva regla nativa
+        Vector3 avoidance = CalculateObstacleAvoidance(); 
 
-        // --------------------------
-        // FOLLOW LEADER
-        // --------------------------
+
         Vector3 leaderForce = Vector3.zero;
 
         if (leader != null)
@@ -56,22 +54,12 @@ public class FlockingGuard : MonoBehaviour
 
             if (distToLeader < leaderSeparationDistance)
             {
-                separation += (transform.position - leader.position).normalized
-                              * (leaderSeparationDistance - distToLeader);
+                separation += (transform.position - leader.position).normalized * (leaderSeparationDistance - distToLeader);
             }
         }
-
-        // --------------------------
-        // COMBINAR FUERZAS
-        // --------------------------
         
-        // Sumamos TODAS las fuerzas, incluyendo la de evasión
-        Vector3 flockDirection =
-            alignment * alignmentWeight +
-            cohesion * cohesionWeight +
-            separation * separationWeight +
-            leaderForce * leaderWeight +
-            avoidance * avoidanceWeight; // <-- El peso alto asegura que no choquen
+        Vector3 flockDirection = alignment * alignmentWeight + cohesion * cohesionWeight + separation * separationWeight 
+                                    + leaderForce * leaderWeight + avoidance * avoidanceWeight; // <-- El peso alto asegura que no choquen
 
         flockDirection.y = 0;
 
@@ -86,9 +74,6 @@ public class FlockingGuard : MonoBehaviour
         }
     }
 
-    // ==========================================
-    // NUEVO MÉTODO DE EVASIÓN PARA FLOCKING
-    // ==========================================
     Vector3 CalculateObstacleAvoidance()
     {
         Vector3 avoidForce = Vector3.zero;
@@ -103,20 +88,18 @@ public class FlockingGuard : MonoBehaviour
 
         foreach (Vector3 dir in rayDirections)
         {
-            // Si un rayo choca con la pared...
+            // Si un rayo choca con la pared
             if (Physics.Raycast(transform.position, dir, out hit, avoidanceRadius, obstacleMask))
             {
-                // La pared "empuja" al agente basándose en la normal del muro
-                // Cuanto más cerca está de la pared, más fuerte es el empuje
+                // La pared "empuja" al agente basandose en la normal del muro
+                // Cuanto mas cerca esta de la pared, mas fuerte es el empuje
                 float distanceRatio = 1f - (hit.distance / avoidanceRadius);
                 avoidForce += hit.normal * distanceRatio;
                 
-                // Línea roja en la escena para que veas qué está esquivando
                 Debug.DrawLine(transform.position, hit.point, Color.red);
             }
             else
             {
-                // Línea verde indicando el camino libre
                 Debug.DrawRay(transform.position, dir * avoidanceRadius, Color.green);
             }
         }
@@ -124,9 +107,7 @@ public class FlockingGuard : MonoBehaviour
         return avoidForce.normalized;
     }
 
-    // ==========================================
-    // REGLAS ORIGINALES
-    // ==========================================
+    
     Vector3 CalculateAlignment()
     {
         Vector3 avgDir = Vector3.zero;

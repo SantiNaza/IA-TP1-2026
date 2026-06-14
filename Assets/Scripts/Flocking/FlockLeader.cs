@@ -27,7 +27,7 @@ public class FlockLeader : MonoBehaviour
 
         Vector3 desiredDirection = Vector3.zero;
 
-        // 1. Ejecutar el comportamiento según el estado
+        // 1. Ejecutar el comportamiento segun el estado
         switch (currentState)
         {
             case GuardStateEnum.Patrol:
@@ -38,7 +38,7 @@ public class FlockLeader : MonoBehaviour
                 break;
             case GuardStateEnum.Attack:
                 AttackPlayer();
-                return; // Cortamos aquí para que no intente moverse más
+                return;
         }
 
         // 2. Obstacle Avoidance (Siempre activo, incluso si persigue)
@@ -46,7 +46,7 @@ public class FlockLeader : MonoBehaviour
         Vector3 finalDirection = desiredDirection + (avoidanceForce * avoidanceWeight);
         finalDirection.y = 0;
 
-        // 3. Mover al líder
+        // 3. Mover al lider
         if (finalDirection.magnitude > 0.01f)
         {
             Vector3 velocity = finalDirection.normalized;
@@ -57,9 +57,7 @@ public class FlockLeader : MonoBehaviour
         }
     }
 
-    // ==========================================
-    // LOGICA DE ESTADOS
-    // ==========================================
+    // Logica de Estados
     void CheckStateTransitions()
     {
         if (targetPlayer == null) return;
@@ -67,17 +65,16 @@ public class FlockLeader : MonoBehaviour
 
         float distToPlayer = Vector3.Distance(transform.position, targetPlayer.position);
 
-        // Transición a ATAQUE
+        // Transicion a ATAQUE
         if (distToPlayer <= attackRange)
         {
             currentState = GuardStateEnum.Attack;
         }
-        // Transición a CHASE (Usando tu script LineOfSight)
+        // Transicion a CHASE
         else if (los != null && los.CanSeeTarget(targetPlayer))
         {
             currentState = GuardStateEnum.Chase;
         }
-        // Opcional: Podrías añadir lógica aquí para volver a Patrol si lo pierde de vista
     }
 
     Vector3 GetPatrolDirection()
@@ -99,19 +96,14 @@ public class FlockLeader : MonoBehaviour
     {
         if (targetPlayer == null) return transform.forward;
         
-        // Va directo hacia el jugador
         return (targetPlayer.position - transform.position).normalized;
     }
 
     void AttackPlayer()
     {
-        // Misma lógica de Game Over que tienes en tu GuardEnemyController
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // ==========================================
-    // EVASIÓN DE OBSTÁCULOS
-    // ==========================================
     Vector3 CalculateObstacleAvoidance()
     {
         Vector3 avoidForce = Vector3.zero;

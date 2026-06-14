@@ -5,6 +5,11 @@ public class NavWaypoint : MonoBehaviour
 {
     public List<NavWaypoint> neighbors = new List<NavWaypoint>();
 
+    public float CostTo(NavWaypoint other)
+    {
+        return Vector3.Distance(transform.position, other.transform.position);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -16,9 +21,7 @@ public class NavWaypoint : MonoBehaviour
         {
             if (neighbor != null)
             {
-                Gizmos.DrawLine(
-                    transform.position,
-                    neighbor.transform.position);
+                Gizmos.DrawLine(transform.position, neighbor.transform.position);
             }
         }
     }

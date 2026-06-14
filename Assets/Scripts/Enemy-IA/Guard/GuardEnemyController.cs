@@ -304,4 +304,5 @@ public class GuardEnemyController : MonoBehaviour
     {
         return currentPathIndex >= currentPath.Count;
     }
+
 }

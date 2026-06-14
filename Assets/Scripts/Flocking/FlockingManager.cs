@@ -9,9 +9,8 @@ public class FlockingManager : MonoBehaviour
     {
         guards.Clear();
 
-        FlockingGuard[] allGuards =
-            FindObjectsOfType<FlockingGuard>();
-
+        FlockingGuard[] allGuards = FindObjectsByType<FlockingGuard>(FindObjectsSortMode.None);
+        
         guards.AddRange(allGuards);
     }
 }

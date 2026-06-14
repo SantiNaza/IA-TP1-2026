@@ -467,13 +467,14 @@ GameObject:
   - component: {fileID: 55850155}
   - component: {fileID: 55850157}
   - component: {fileID: 55850156}
+  - component: {fileID: 55850158}
   m_Layer: 0
   m_Name: WP1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &55850155
 Transform:
   m_ObjectHideFlags: 0
@@ -546,6 +547,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &55850158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55850154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 502178282}
+  - {fileID: 1735648448}
 --- !u!1 &133133516
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,7 +956,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &154212378
 GameObject:
@@ -1357,7 +1373,7 @@ Transform:
   m_GameObject: {fileID: 181656902}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7.940001, y: 0, z: 0.14}
+  m_LocalPosition: {x: -7.940001, y: 0, z: 1.6500002}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1374,13 +1390,14 @@ GameObject:
   - component: {fileID: 190081005}
   - component: {fileID: 190081007}
   - component: {fileID: 190081006}
+  - component: {fileID: 190081008}
   m_Layer: 0
   m_Name: WP5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &190081005
 Transform:
   m_ObjectHideFlags: 0
@@ -1453,6 +1470,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190081004}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &190081008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190081004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 980640546}
+  - {fileID: 479680701}
 --- !u!1 &196111674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1464,13 +1496,14 @@ GameObject:
   - component: {fileID: 196111675}
   - component: {fileID: 196111677}
   - component: {fileID: 196111676}
+  - component: {fileID: 196111678}
   m_Layer: 0
   m_Name: WP11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &196111675
 Transform:
   m_ObjectHideFlags: 0
@@ -1543,6 +1576,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196111674}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &196111678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196111674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 2004322306}
+  - {fileID: 855020298}
 --- !u!1 &197651473
 GameObject:
   m_ObjectHideFlags: 0
@@ -2699,7 +2747,7 @@ Transform:
   m_GameObject: {fileID: 439770853}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -12.27, y: 0, z: 0.14}
+  m_LocalPosition: {x: -13.25, y: 0, z: 1.6500002}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3121,7 +3169,7 @@ Transform:
   m_GameObject: {fileID: 451315607}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.6908243, z: -0, w: 0.7230227}
-  m_LocalPosition: {x: -4.58, y: 0, z: -3.63}
+  m_LocalPosition: {x: -3.1800003, y: 0, z: -3.63}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3323,13 +3371,14 @@ GameObject:
   - component: {fileID: 479680698}
   - component: {fileID: 479680700}
   - component: {fileID: 479680699}
+  - component: {fileID: 479680701}
   m_Layer: 0
   m_Name: WP6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &479680698
 Transform:
   m_ObjectHideFlags: 0
@@ -3402,6 +3451,86 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &479680701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479680697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 980640546}
+  - {fileID: 190081008}
+--- !u!1 &486043811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 486043813}
+  - component: {fileID: 486043812}
+  m_Layer: 0
+  m_Name: NavigationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &486043812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486043811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5cd8be4d0e420947ae2cff45fbe5742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavigationManager
+  allWaypoints:
+  - {fileID: 55850158}
+  - {fileID: 502178282}
+  - {fileID: 1735648448}
+  - {fileID: 980640546}
+  - {fileID: 190081008}
+  - {fileID: 479680701}
+  - {fileID: 439770857}
+  - {fileID: 181656903}
+  - {fileID: 1204948716}
+  - {fileID: 1904563958}
+  - {fileID: 451315611}
+  - {fileID: 547657548}
+  - {fileID: 1209586154}
+  - {fileID: 1684113074}
+  - {fileID: 2004322306}
+  - {fileID: 196111678}
+  - {fileID: 855020298}
+  - {fileID: 868343953}
+  - {fileID: 1310416691}
+  - {fileID: 888107553}
+--- !u!4 &486043813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486043811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.20105, y: 0, z: -27.59751}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &489986445
 GameObject:
   m_ObjectHideFlags: 0
@@ -3557,13 +3686,14 @@ GameObject:
   - component: {fileID: 502178279}
   - component: {fileID: 502178281}
   - component: {fileID: 502178280}
+  - component: {fileID: 502178282}
   m_Layer: 0
   m_Name: WP2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &502178279
 Transform:
   m_ObjectHideFlags: 0
@@ -3636,6 +3766,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502178278}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &502178282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502178278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 55850158}
+  - {fileID: 1735648448}
 --- !u!1 &515598378
 GameObject:
   m_ObjectHideFlags: 0
@@ -4121,7 +4266,7 @@ Transform:
   m_GameObject: {fileID: 547657547}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -12.27, y: 0, z: -7.93}
+  m_LocalPosition: {x: -13.25, y: 0, z: -9.14}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4310,10 +4455,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   target: {fileID: 903181365}
   los: {fileID: 1529742714}
-  waypoints:
-  - {fileID: 55850155}
-  - {fileID: 502178279}
-  - {fileID: 1735648445}
   steeringAgent: {fileID: 595608518}
   decisionTree: {fileID: 595608519}
   speed: 2.5
@@ -4321,7 +4462,10 @@ MonoBehaviour:
   attackRange: 1.2
   idleTime: 1.5
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
-  navigationWaypoints: []
+  patrolWaypoints:
+  - {fileID: 55850158}
+  - {fileID: 502178282}
+  - {fileID: 1735648448}
 --- !u!54 &595608513
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4821,7 +4965,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &748234209
 GameObject:
@@ -5111,13 +5255,14 @@ GameObject:
   - component: {fileID: 855020295}
   - component: {fileID: 855020297}
   - component: {fileID: 855020296}
+  - component: {fileID: 855020298}
   m_Layer: 0
   m_Name: WP12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &855020295
 Transform:
   m_ObjectHideFlags: 0
@@ -5190,6 +5335,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &855020298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855020294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 2004322306}
+  - {fileID: 196111678}
 --- !u!1 &866670240
 GameObject:
   m_ObjectHideFlags: 0
@@ -5314,13 +5474,14 @@ GameObject:
   - component: {fileID: 868343950}
   - component: {fileID: 868343952}
   - component: {fileID: 868343951}
+  - component: {fileID: 868343953}
   m_Layer: 0
   m_Name: WP13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &868343950
 Transform:
   m_ObjectHideFlags: 0
@@ -5393,6 +5554,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &868343953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868343949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 1310416691}
+  - {fileID: 888107553}
 --- !u!1 &883235860
 GameObject:
   m_ObjectHideFlags: 0
@@ -5435,13 +5611,14 @@ GameObject:
   - component: {fileID: 888107550}
   - component: {fileID: 888107552}
   - component: {fileID: 888107551}
+  - component: {fileID: 888107553}
   m_Layer: 0
   m_Name: WP15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &888107550
 Transform:
   m_ObjectHideFlags: 0
@@ -5514,6 +5691,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &888107553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888107549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 868343953}
+  - {fileID: 1310416691}
 --- !u!1 &891015795
 GameObject:
   m_ObjectHideFlags: 0
@@ -6003,13 +6195,14 @@ GameObject:
   - component: {fileID: 980640543}
   - component: {fileID: 980640545}
   - component: {fileID: 980640544}
+  - component: {fileID: 980640546}
   m_Layer: 0
   m_Name: WP4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &980640543
 Transform:
   m_ObjectHideFlags: 0
@@ -6082,6 +6275,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &980640546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980640542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 190081008}
+  - {fileID: 479680701}
 --- !u!1 &992770175
 GameObject:
   m_ObjectHideFlags: 0
@@ -7168,7 +7376,7 @@ Transform:
   m_GameObject: {fileID: 1204948715}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.58, y: 0, z: 0.14}
+  m_LocalPosition: {x: -3.18, y: 0, z: 1.65}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7274,7 +7482,7 @@ Transform:
   m_GameObject: {fileID: 1209586153}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7.9400015, y: 0, z: -7.93}
+  m_LocalPosition: {x: -7.9400015, y: 0, z: -9.140001}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7334,15 +7542,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   target: {fileID: 903181365}
   los: {fileID: 1129208605}
-  waypoints:
-  - {fileID: 439770854}
-  - {fileID: 181656906}
-  - {fileID: 1204948719}
-  - {fileID: 451315608}
-  - {fileID: 547657551}
-  - {fileID: 1209586157}
-  - {fileID: 1684113073}
-  - {fileID: 1904563955}
   steeringAgent: {fileID: 1298678265}
   decisionTree: {fileID: 1298678266}
   speed: 2.5
@@ -7350,15 +7549,15 @@ MonoBehaviour:
   attackRange: 1.2
   idleTime: 2
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
-  navigationWaypoints:
+  patrolWaypoints:
   - {fileID: 439770857}
   - {fileID: 181656903}
   - {fileID: 1204948716}
-  - {fileID: 1904563958}
   - {fileID: 451315611}
-  - {fileID: 547657548}
-  - {fileID: 1209586154}
   - {fileID: 1684113074}
+  - {fileID: 1209586154}
+  - {fileID: 547657548}
+  - {fileID: 1904563958}
 --- !u!54 &1298678261
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7509,13 +7708,14 @@ GameObject:
   - component: {fileID: 1310416688}
   - component: {fileID: 1310416690}
   - component: {fileID: 1310416689}
+  - component: {fileID: 1310416691}
   m_Layer: 0
   m_Name: WP14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1310416688
 Transform:
   m_ObjectHideFlags: 0
@@ -7588,6 +7788,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1310416687}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1310416691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310416687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 868343953}
+  - {fileID: 888107553}
 --- !u!1 &1353755803
 GameObject:
   m_ObjectHideFlags: 0
@@ -7757,7 +7972,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &1353755810
 MonoBehaviour:
@@ -8536,7 +8751,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &1529742711
 GameObject:
@@ -9095,7 +9310,7 @@ Transform:
   m_GameObject: {fileID: 1684113072}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.58, y: 0, z: -7.93}
+  m_LocalPosition: {x: -3.18, y: 0, z: -9.140001}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9548,13 +9763,14 @@ GameObject:
   - component: {fileID: 1735648445}
   - component: {fileID: 1735648447}
   - component: {fileID: 1735648446}
+  - component: {fileID: 1735648448}
   m_Layer: 0
   m_Name: WP3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1735648445
 Transform:
   m_ObjectHideFlags: 0
@@ -9627,6 +9843,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1735648448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735648444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 55850158}
+  - {fileID: 502178282}
 --- !u!1 &1768815232
 GameObject:
   m_ObjectHideFlags: 0
@@ -10043,10 +10274,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   target: {fileID: 903181365}
   los: {fileID: 1115763294}
-  waypoints:
-  - {fileID: 980640543}
-  - {fileID: 190081005}
-  - {fileID: 479680698}
   steeringAgent: {fileID: 1828052907}
   decisionTree: {fileID: 1828052908}
   speed: 2.5
@@ -10054,7 +10281,10 @@ MonoBehaviour:
   attackRange: 1.2
   idleTime: 1
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
-  navigationWaypoints: []
+  patrolWaypoints:
+  - {fileID: 980640546}
+  - {fileID: 190081008}
+  - {fileID: 479680701}
 --- !u!54 &1828052903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10494,7 +10724,7 @@ Transform:
   m_GameObject: {fileID: 1904563954}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.6908243, z: -0, w: 0.7230227}
-  m_LocalPosition: {x: -12.27, y: 0, z: -4.37}
+  m_LocalPosition: {x: -13.25, y: 0, z: -4.37}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10807,13 +11037,14 @@ GameObject:
   - component: {fileID: 2004322303}
   - component: {fileID: 2004322305}
   - component: {fileID: 2004322304}
+  - component: {fileID: 2004322306}
   m_Layer: 0
   m_Name: WP10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2004322303
 Transform:
   m_ObjectHideFlags: 0
@@ -10886,6 +11117,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2004322306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004322302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393477bf74ca4a743b42b10989aa4ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
+  neighbors:
+  - {fileID: 196111678}
+  - {fileID: 855020298}
 --- !u!1 &2013733216
 GameObject:
   m_ObjectHideFlags: 0
@@ -11570,6 +11816,7 @@ SceneRoots:
   - {fileID: 1732860924}
   - {fileID: 2089666000}
   - {fileID: 515598380}
+  - {fileID: 486043813}
   - {fileID: 2137781229}
   - {fileID: 932984335}
   - {fileID: 1070923840}

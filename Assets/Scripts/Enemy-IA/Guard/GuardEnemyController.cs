@@ -8,7 +8,6 @@ public class GuardEnemyController : MonoBehaviour
     [Header("References")]
     public Transform target;
     public LineOfSight los;
-    public Transform[] waypoints;
     public SteeringAgent steeringAgent;
     public GuardDecisionTree decisionTree;
 
@@ -16,7 +15,7 @@ public class GuardEnemyController : MonoBehaviour
 
     [Header("Movement")]
     public float speed = 2.5f;
-    public float waypointReachDistance = 0.5f;
+    public float waypointReachDistance = 1.2f;
     public float attackRange = 1.2f;
 
     [Header("Idle")]
@@ -32,8 +31,8 @@ public class GuardEnemyController : MonoBehaviour
 
     public Vector3 LastKnownPlayerPosition;
 
-    [Header("Pathfinding")]
-    public NavWaypoint[] navigationWaypoints;
+    [Header("Patrol Route")]
+    public NavWaypoint[] patrolWaypoints;
 
     private List<NavWaypoint> currentPath = new List<NavWaypoint>();
 
@@ -91,12 +90,12 @@ public class GuardEnemyController : MonoBehaviour
 
     public void Patrol()
     {
-        if (waypoints == null || waypoints.Length == 0) return;
+        if (patrolWaypoints == null || patrolWaypoints.Length == 0) return;
         if (isWaiting) return;
 
-        Transform wp = waypoints[_currentWaypointIndex];
+        NavWaypoint wp = patrolWaypoints[_currentWaypointIndex];
 
-        Vector3 dir = wp.position - transform.position;
+        Vector3 dir = wp.transform.position - transform.position;
         dir.y = 0;
 
         if (dir.magnitude < waypointReachDistance)
@@ -104,7 +103,7 @@ public class GuardEnemyController : MonoBehaviour
             if (steeringAgent != null)
                 steeringAgent.Stop();
 
-            Vector3 lookDir = wp.position - transform.position;
+            Vector3 lookDir = wp.transform.position - transform.position;
             lookDir.y = 0;
 
             if (lookDir.sqrMagnitude > 0.01f)
@@ -145,10 +144,10 @@ public class GuardEnemyController : MonoBehaviour
 
         if (steeringAgent != null)
         {
-            if (_currentSteeringTarget != wp)
+            if (_currentSteeringTarget != wp.transform)
             {
-                _currentSteeringTarget = wp;
-                steeringAgent.SetTarget(wp);
+                _currentSteeringTarget = wp.transform;
+                steeringAgent.SetTarget(wp.transform);
             }
 
             steeringAgent.MoveToTarget(true);
@@ -189,11 +188,11 @@ public class GuardEnemyController : MonoBehaviour
 
     void ClampWaypointIndex()
     {
-        if (waypoints == null || waypoints.Length == 0) return;
+        if (patrolWaypoints == null || patrolWaypoints.Length == 0) return;
 
-        if (_currentWaypointIndex >= waypoints.Length)
+        if (_currentWaypointIndex >= patrolWaypoints.Length)
         {
-            _currentWaypointIndex = waypoints.Length - 1;
+            _currentWaypointIndex = patrolWaypoints.Length - 1;
             _direction = -1;
         }
         else if (_currentWaypointIndex < 0)
@@ -246,7 +245,7 @@ public class GuardEnemyController : MonoBehaviour
 
         float closestDistance = Mathf.Infinity;
 
-        foreach (NavWaypoint wp in navigationWaypoints)
+        foreach (NavWaypoint wp in NavigationManager.Instance.allWaypoints)
         {
             float distance =
                 Vector3.Distance(position, wp.transform.position);

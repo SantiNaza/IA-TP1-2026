@@ -60,8 +60,9 @@ public class SteeringAgent : MonoBehaviour
         if (desiredVelocity.magnitude < 0.05f)
             desiredVelocity = transform.forward * 0.1f;
 
-        if (_avoidance.TryGetAvoidDir(desiredVelocity, out Vector3 avoidDir))
-            desiredVelocity = avoidDir * maxSpeed;
+        // Obstacle Avoidance desactivado para Patrol y Pathfinding.
+        //if (_avoidance.TryGetAvoidDir(desiredVelocity, out Vector3 avoidDir))
+          //  desiredVelocity = avoidDir * maxSpeed;
 
         _velocity = desiredVelocity;
 

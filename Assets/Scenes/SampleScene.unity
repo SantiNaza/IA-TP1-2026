@@ -1044,16 +1044,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CowardEnemyController
   target: {fileID: 903181365}
   los: {fileID: 1034424818}
-  waypoints:
-  - {fileID: 868343950}
-  - {fileID: 1310416688}
-  - {fileID: 888107550}
   steeringAgent: {fileID: 154212381}
   decisionTree: {fileID: 154212380}
   waypointReachDistance: 1.2
   attackRange: 1.2
   trappedDistance: 2.5
   idleTime: 2
+  LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
+  patrolWaypoints:
+  - {fileID: 868343953}
+  - {fileID: 1310416691}
+  - {fileID: 888107553}
 --- !u!136 &154212383
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2898,16 +2899,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CowardEnemyController
   target: {fileID: 903181365}
   los: {fileID: 947929079}
-  waypoints:
-  - {fileID: 2004322303}
-  - {fileID: 196111675}
-  - {fileID: 855020295}
   steeringAgent: {fileID: 440193268}
   decisionTree: {fileID: 440193274}
   waypointReachDistance: 1.2
   attackRange: 1.2
   trappedDistance: 2.5
   idleTime: 2
+  LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
+  patrolWaypoints:
+  - {fileID: 2004322306}
+  - {fileID: 196111678}
+  - {fileID: 855020298}
 --- !u!136 &440193270
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6435,7 +6437,7 @@ Transform:
   m_GameObject: {fileID: 1021720028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.20192963, z: -0, w: 0.97940004}
-  m_LocalPosition: {x: 12.77, y: 0.5, z: -6.9220896}
+  m_LocalPosition: {x: 10.77, y: 0.5, z: -11.56}
   m_LocalScale: {x: 5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10214,7 +10216,7 @@ Transform:
   m_GameObject: {fileID: 1797204320}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.87485, z: -0, w: 0.48439398}
-  m_LocalPosition: {x: 30.784641, y: 0.5, z: -3.85}
+  m_LocalPosition: {x: 24.67, y: 0.5, z: -10.59}
   m_LocalScale: {x: 4, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []

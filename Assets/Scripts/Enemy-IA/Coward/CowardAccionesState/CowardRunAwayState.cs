@@ -11,6 +11,12 @@ public class CowardRunAwayState : State<CowardStateEnum>
 
     public override void Execute()
     {
+        if (!_enemy.CanSeeTarget())
+        {
+            _enemy.TransitionTo(CowardStateEnum.Pathfinding);
+            return;
+        }
+
         _enemy.RunAway();
     }
 }

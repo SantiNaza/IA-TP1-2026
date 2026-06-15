@@ -1308,6 +1308,7 @@ MonoBehaviour:
   neighbors:
   - {fileID: 439770857}
   - {fileID: 1204948716}
+  - {fileID: 1204948716}
 --- !u!33 &181656904
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2826,6 +2827,7 @@ MonoBehaviour:
   neighbors:
   - {fileID: 181656903}
   - {fileID: 1904563958}
+  - {fileID: 1904563958}
 --- !u!1 &440193266
 GameObject:
   m_ObjectHideFlags: 0
@@ -3248,6 +3250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
   neighbors:
   - {fileID: 1204948716}
+  - {fileID: 1684113074}
   - {fileID: 1684113074}
 --- !u!1 &462177691
 GameObject:
@@ -4201,6 +4204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
   neighbors:
   - {fileID: 1209586154}
+  - {fileID: 1904563958}
   - {fileID: 1904563958}
 --- !u!33 &547657549
 MeshFilter:
@@ -5812,7 +5816,7 @@ Transform:
   m_GameObject: {fileID: 903181362}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.53, y: 1, z: -25.31}
+  m_LocalPosition: {x: -1.53, y: 1, z: 4.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7141,6 +7145,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170282972}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1186296278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1186296280}
+  - component: {fileID: 1186296279}
+  m_Layer: 0
+  m_Name: SafeWaypointManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1186296279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186296278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2730f5ce8b99be242b8d69c732cb8c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SafeWaypointManager
+  safeWaypoints:
+  - {fileID: 55850158}
+--- !u!4 &1186296280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186296278}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.90373, y: 0, z: 2.63285}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1202396997
 GameObject:
   m_ObjectHideFlags: 0
@@ -7312,6 +7362,7 @@ MonoBehaviour:
   neighbors:
   - {fileID: 181656903}
   - {fileID: 451315611}
+  - {fileID: 451315611}
 --- !u!33 &1204948717
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7417,6 +7468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NavWaypoint
   neighbors:
   - {fileID: 1684113074}
+  - {fileID: 547657548}
   - {fileID: 547657548}
 --- !u!33 &1209586155
 MeshFilter:
@@ -9333,6 +9385,7 @@ MonoBehaviour:
   neighbors:
   - {fileID: 451315611}
   - {fileID: 1209586154}
+  - {fileID: 1209586154}
 --- !u!33 &1684113075
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -10804,6 +10857,7 @@ MonoBehaviour:
   neighbors:
   - {fileID: 547657548}
   - {fileID: 439770857}
+  - {fileID: 439770857}
 --- !u!1 &1935696350
 GameObject:
   m_ObjectHideFlags: 0
@@ -11818,6 +11872,7 @@ SceneRoots:
   - {fileID: 1732860924}
   - {fileID: 2089666000}
   - {fileID: 515598380}
+  - {fileID: 1186296280}
   - {fileID: 486043813}
   - {fileID: 2137781229}
   - {fileID: 932984335}

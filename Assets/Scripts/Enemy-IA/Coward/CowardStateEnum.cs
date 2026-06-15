@@ -6,5 +6,6 @@ public enum CowardStateEnum
     Idle,
     RunAway,
     Pathfinding,
+    Safe,
     Attack
 }

@@ -20,7 +20,7 @@ public class CowardPathfindingState: State<CowardStateEnum>
 
         if (enemy.PathFinished())
         {
-            enemy.TransitionTo(CowardStateEnum.Patrol);
+            enemy.TransitionTo(CowardStateEnum.Safe);
         }
     }
 }

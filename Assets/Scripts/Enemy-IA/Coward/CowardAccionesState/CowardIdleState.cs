@@ -14,7 +14,6 @@ public class CowardIdleState : State<CowardStateEnum>
     {
         _timer = 0f;
         _enemy.steeringAgent.Stop();
-        _enemy.TransitionTo(CowardStateEnum.Patrol);
     }
 
     public override void Execute()

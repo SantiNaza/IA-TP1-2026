@@ -30,8 +30,6 @@ public class CowardEnemyController : MonoBehaviour
     [Header("Patrol Route")]
     public NavWaypoint[] patrolWaypoints;
 
-
-
     private List<NavWaypoint> currentPath = new List<NavWaypoint>();
 
     private int currentPathIndex;
@@ -64,6 +62,7 @@ public class CowardEnemyController : MonoBehaviour
         var idle = new CowardIdleState(this);
         var runAway = new CowardRunAwayState(this);
         var pathfinding = new CowardPathfindingState(this);
+        var safe = new CowardSafeState(this);
         var attack = new CowardAttackState(this);
 
         patrol.AddTransition(CowardStateEnum.Idle, idle);
@@ -77,7 +76,12 @@ public class CowardEnemyController : MonoBehaviour
 
         attack.AddTransition(CowardStateEnum.Patrol, patrol);
 
-        pathfinding.AddTransition(CowardStateEnum.Patrol,patrol);
+        pathfinding.AddTransition(CowardStateEnum.Safe, safe);
+
+        safe.AddTransition(CowardStateEnum.Patrol, patrol);
+        safe.AddTransition(CowardStateEnum.RunAway, runAway);
+        safe.AddTransition(CowardStateEnum.Attack, attack);
+        safe.AddTransition(CowardStateEnum.Pathfinding, pathfinding);
 
         _fsm = new FSM<CowardStateEnum>(patrol, CowardStateEnum.Patrol);
     }
@@ -191,8 +195,6 @@ public class CowardEnemyController : MonoBehaviour
         return _fsm.CurrentStateId.ToString();
     }
 
-
-
     public NavWaypoint GetClosestWaypoint(Vector3 position)
     {
         NavWaypoint closest = null;
@@ -214,16 +216,47 @@ public class CowardEnemyController : MonoBehaviour
         return closest;
     }
 
+    public NavWaypoint GetFarthestSafeWaypoint()
+    {
+        if (SafeWaypointManager.Instance == null)
+            return null;
+
+        NavWaypoint best = null;
+
+        float farthestDistance = -1f;
+
+        foreach (NavWaypoint wp in SafeWaypointManager.Instance.safeWaypoints)
+        {
+            float distance = Vector3.Distance(target.position, wp.transform.position);
+
+            if (distance > farthestDistance)
+            {
+                farthestDistance = distance;
+                best = wp;
+            }
+        }
+
+        return best;
+    }
+
     public void CalculatePath()
     {
-        NavWaypoint start =
-            GetClosestWaypoint(transform.position);
+        NavWaypoint start = GetClosestWaypoint(transform.position);
 
-        NavWaypoint end =
-            GetClosestWaypoint(LastKnownPlayerPosition);
+        NavWaypoint safe = GetFarthestSafeWaypoint();
 
-        currentPath =
-            WaypointPathfinding.FindPath(start, end);
+        if (safe == null)
+        {
+            currentPath.Clear();
+            return;
+        }
+
+        currentPath = WaypointPathfinding.FindPath(start, safe);
+
+        if (currentPath.Count == 0)
+        {
+            Debug.LogWarning("No path found!");
+        }
 
         currentPathIndex = 0;
     }
@@ -243,9 +276,7 @@ public class CowardEnemyController : MonoBehaviour
         steeringAgent.MoveToTarget(true);
 
         float distance =
-            Vector3.Distance(
-                transform.position,
-                currentNode.transform.position);
+            Vector3.Distance(transform.position, currentNode.transform.position);
 
         if (distance < waypointReachDistance)
         {

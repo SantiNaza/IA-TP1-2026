@@ -38,7 +38,6 @@ public class GuardEnemyController : MonoBehaviour
 
     private int currentPathIndex;
 
-    // Nueva: enum para acciones de patrulla
     private enum GuardPatrolAction
     {
         WAIT,
@@ -46,7 +45,6 @@ public class GuardEnemyController : MonoBehaviour
         FORWARD_TWO
     }
 
-    // Nueva: selector reutilizable
     private RouletteWheelSelector<GuardPatrolAction> _rouletteSelector;
 
     private void Start()
@@ -134,24 +132,20 @@ public class GuardEnemyController : MonoBehaviour
                 return;
             }
 
-            // --- Actualizar pesos dinámicos desde el enemigo ---
-            // Ejemplo sencillo: si puede ver al jugador, cambiar los pesos a estado "alertado".
-            if (CanSeeTarget())
+            if (_currentWaypointIndex < patrolWaypoints.Length / 2)
             {
-                // Jugador visto recientemente: reducir WAIT, aumentar FORWARD_TWO
                 _rouletteSelector.UpdateWeight(GuardPatrolAction.WAIT, 20f);
                 _rouletteSelector.UpdateWeight(GuardPatrolAction.BACK, 30f);
                 _rouletteSelector.UpdateWeight(GuardPatrolAction.FORWARD_TWO, 50f);
             }
             else
             {
-                // Estado normal
+
                 _rouletteSelector.UpdateWeight(GuardPatrolAction.WAIT, 50f);
                 _rouletteSelector.UpdateWeight(GuardPatrolAction.BACK, 30f);
                 _rouletteSelector.UpdateWeight(GuardPatrolAction.FORWARD_TWO, 20f);
             }
 
-            // Selección delegada al RouletteWheelSelector
             GuardPatrolAction action = _rouletteSelector.Select();
 
             switch (action)
@@ -203,8 +197,6 @@ public class GuardEnemyController : MonoBehaviour
 
         isWaiting = false;
     }
-
-    // Nota: el método RollRoulette() ha sido eliminado; la lógica está ahora en RouletteWheelSelector.
 
     void ClampWaypointIndex()
     {

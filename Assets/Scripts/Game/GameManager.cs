@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Progress")]
-    public int totalBallsRequired = 3;
+    public int totalBallsRequired = 5;
 
     [Header("UI")]
     public TMP_Text counterText;

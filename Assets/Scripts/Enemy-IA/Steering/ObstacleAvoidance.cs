@@ -8,7 +8,7 @@ public class ObstacleAvoidance
     LayerMask _obsMask;
     Collider[] _colls;
 
-    int _lastSide = 1; 
+    int _lastSide = 1;
 
     public ObstacleAvoidance(Transform entity, float radius, float angle, LayerMask obsMask, int maxObs = 10)
     {
@@ -26,7 +26,7 @@ public class ObstacleAvoidance
         if (currDir == Vector3.zero)
             currDir = _entity.forward;
 
-        // Detecta obstaculos cerca dentro del radio y el angulo (como un cono de vision
+        // Detecta obstáculos cerca dentro del radio
         int count = Physics.OverlapSphereNonAlloc(_entity.position, _radius, _colls, _obsMask);
 
         Collider nearColl = null;
@@ -38,10 +38,13 @@ public class ObstacleAvoidance
             Collider c = _colls[i];
 
             Vector3 closestPoint = c.ClosestPoint(_entity.position);
-            closestPoint.y = _entity.position.y;
+            closestPoint.y = _entity.position.y; // Mantener en el plano horizontal
 
             Vector3 dirToColl = closestPoint - _entity.position;
             float dist = dirToColl.magnitude;
+
+            // Evitamos divisiones por cero si la IA está exactamente encima del punto
+            if (dist < 0.01f) continue;
 
             float ang = Vector3.Angle(currDir, dirToColl);
             if (ang > _angle * 0.5f) continue;
@@ -57,18 +60,29 @@ public class ObstacleAvoidance
         if (nearColl == null)
             return false;
 
-        Vector3 dirToClosest = (nearPoint - _entity.position).normalized;
+        // --- NUEVA LÓGICA PARA LABERINTOS Y PAREDES ---
 
-        // Si encuentra un obstaculo adelante, calcula una direccion perpendicular para esquivarlo
-        avoidDir = Vector3.Cross(Vector3.up, dirToClosest).normalized;
+        // Vector que va desde la pared hacia la IA (Fuerza de repulsión directa)
+        Vector3 repulsionDir = (_entity.position - nearPoint).normalized;
 
-        // Elege izq o der segun donde este el obstaculo.
+        // Vector de evasión lateral clásico (el que ya tenías con el producto cruz)
+        Vector3 lateralAvoidDir = Vector3.Cross(Vector3.up, (nearPoint - _entity.position).normalized).normalized;
+
+        // Decidir si esquivar por izquierda o derecha según la posición local
         Vector3 local = _entity.InverseTransformPoint(nearPoint);
-
         if (Mathf.Abs(local.x) > 0.05f)
-            _lastSide = (local.x < 0) ? -1 : 1;
+            _lastSide = (local.x < 0) ? 1 : -1; // Invertido para que coincida con el empuje
 
-        avoidDir *= _lastSide;
+        lateralAvoidDir *= _lastSide;
+
+        // COMBINACIÓN CRUCIAL: Sumamos el empuje hacia afuera (repulsionDir) + el esquive lateral (lateralAvoidDir)
+        // El factor 1.5f le da prioridad a "despegarse" de la pared antes de seguir avanzando.
+        avoidDir = (lateralAvoidDir + repulsionDir * 1.5f).normalized;
+
+        // Debug visual en la escena para la entrega de la UADE (Verde = dirección final de escape)
+        Debug.DrawRay(_entity.position, avoidDir * 2f, Color.green);
+        // Rojo = Punto exacto de la pared que nos está molestando
+        Debug.DrawLine(_entity.position, nearPoint, Color.red);
 
         return true;
     }

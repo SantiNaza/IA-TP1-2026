@@ -38,6 +38,16 @@ public class GuardEnemyController : MonoBehaviour
 
     private int currentPathIndex;
 
+    // Nueva: enum para acciones de patrulla
+    private enum GuardPatrolAction
+    {
+        WAIT,
+        BACK,
+        FORWARD_TWO
+    }
+
+    // Nueva: selector reutilizable
+    private RouletteWheelSelector<GuardPatrolAction> _rouletteSelector;
 
     private void Start()
     {
@@ -45,6 +55,12 @@ public class GuardEnemyController : MonoBehaviour
 
         if (decisionTree != null)
             decisionTree.enemy = this;
+
+        // Inicializar y registrar opciones con pesos por defecto (estado normal)
+        _rouletteSelector = new RouletteWheelSelector<GuardPatrolAction>();
+        _rouletteSelector.Register(GuardPatrolAction.WAIT, 50f);
+        _rouletteSelector.Register(GuardPatrolAction.BACK, 30f);
+        _rouletteSelector.Register(GuardPatrolAction.FORWARD_TWO, 20f);
     }
 
     private void Update()
@@ -118,20 +134,38 @@ public class GuardEnemyController : MonoBehaviour
                 return;
             }
 
-            int result = RollRoulette();
-
-            switch (result)
+            // --- Actualizar pesos dinámicos desde el enemigo ---
+            // Ejemplo sencillo: si puede ver al jugador, cambiar los pesos a estado "alertado".
+            if (CanSeeTarget())
             {
-                case 0: // WAIT (50%)
+                // Jugador visto recientemente: reducir WAIT, aumentar FORWARD_TWO
+                _rouletteSelector.UpdateWeight(GuardPatrolAction.WAIT, 20f);
+                _rouletteSelector.UpdateWeight(GuardPatrolAction.BACK, 30f);
+                _rouletteSelector.UpdateWeight(GuardPatrolAction.FORWARD_TWO, 50f);
+            }
+            else
+            {
+                // Estado normal
+                _rouletteSelector.UpdateWeight(GuardPatrolAction.WAIT, 50f);
+                _rouletteSelector.UpdateWeight(GuardPatrolAction.BACK, 30f);
+                _rouletteSelector.UpdateWeight(GuardPatrolAction.FORWARD_TWO, 20f);
+            }
+
+            // Selección delegada al RouletteWheelSelector
+            GuardPatrolAction action = _rouletteSelector.Select();
+
+            switch (action)
+            {
+                case GuardPatrolAction.WAIT: // WAIT
                     StartCoroutine(WaitAndContinue(2f));
                     break;
 
-                case 1: // BACK 1 (30%)
+                case GuardPatrolAction.BACK: // BACK 1
                     _currentWaypointIndex -= _direction;
                     ClampWaypointIndex();
                     break;
 
-                case 2: // FORWARD 2 (20%)
+                case GuardPatrolAction.FORWARD_TWO: // FORWARD 2
                     _currentWaypointIndex += _direction * 2;
                     ClampWaypointIndex();
                     skipNextRoulette = true;
@@ -170,21 +204,7 @@ public class GuardEnemyController : MonoBehaviour
         isWaiting = false;
     }
 
-    int RollRoulette()
-    {
-        float roll = Random.value; // 0 a 1
-
-        // 50% WAIT
-        if (roll < 0.5f)
-            return 0;
-
-        // 30% BACK
-        if (roll < 0.8f)
-            return 1;
-
-        // 20% FORWARD TWO
-        return 2;
-    }
+    // Nota: el método RollRoulette() ha sido eliminado; la lógica está ahora en RouletteWheelSelector.
 
     void ClampWaypointIndex()
     {

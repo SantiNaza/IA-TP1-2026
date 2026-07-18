@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CowardPathfindingState: State<CowardStateEnum>
+public class CowardPathfindingState : State<CowardStateEnum>
 {
     private CowardEnemyController enemy;
 
@@ -16,6 +16,12 @@ public class CowardPathfindingState: State<CowardStateEnum>
 
     public override void Execute()
     {
+        if (enemy.CanSeeTarget())
+        {
+            enemy.TransitionTo(CowardStateEnum.RunAway);
+            return;
+        }
+
         enemy.FollowPath();
 
         if (enemy.PathFinished())

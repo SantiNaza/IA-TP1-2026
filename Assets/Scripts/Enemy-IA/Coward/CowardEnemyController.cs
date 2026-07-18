@@ -24,15 +24,20 @@ public class CowardEnemyController : MonoBehaviour
 
     private int _currentWaypointIndex = 0;
     private int _direction = 1;
- 
+
     public Vector3 LastKnownPlayerPosition;
 
     [Header("Patrol Route")]
     public NavWaypoint[] patrolWaypoints;
 
     private List<NavWaypoint> currentPath = new List<NavWaypoint>();
-
     private int currentPathIndex;
+
+    private List<NavWaypoint> patrolPath = new List<NavWaypoint>();
+    private int patrolPathIdx = 0;
+    private bool usingPatrolPathfinding = false;
+
+    private NavWaypoint _cachedSafeWaypoint;
 
     private void Start()
     {
@@ -53,7 +58,6 @@ public class CowardEnemyController : MonoBehaviour
 
         if (decision != _fsm.CurrentStateId)
             _fsm.Transition(decision);
-
     }
 
     private void InitializeFSM()
@@ -77,6 +81,7 @@ public class CowardEnemyController : MonoBehaviour
         attack.AddTransition(CowardStateEnum.Patrol, patrol);
 
         pathfinding.AddTransition(CowardStateEnum.Safe, safe);
+        pathfinding.AddTransition(CowardStateEnum.RunAway, runAway);
 
         safe.AddTransition(CowardStateEnum.Patrol, patrol);
         safe.AddTransition(CowardStateEnum.RunAway, runAway);
@@ -86,24 +91,24 @@ public class CowardEnemyController : MonoBehaviour
         _fsm = new FSM<CowardStateEnum>(patrol, CowardStateEnum.Patrol);
     }
 
-
     public void Patrol()
     {
         if (patrolWaypoints == null || patrolWaypoints.Length == 0) return;
 
         NavWaypoint wp = patrolWaypoints[_currentWaypointIndex];
+        Vector3 toWP  = wp.transform.position - transform.position;
+        toWP.y = 0;
 
-        Vector3 dir = wp.transform.position - transform.position;
-        dir.y = 0;
-
-        if (dir.magnitude < waypointReachDistance)
+        if (toWP.magnitude < waypointReachDistance)
         {
+            usingPatrolPathfinding = false;
+            patrolPath.Clear();
+
             steeringAgent.Stop();
             TransitionTo(CowardStateEnum.Idle);
 
             Vector3 lookDir = wp.transform.position - transform.position;
             lookDir.y = 0;
-
             if (lookDir.sqrMagnitude > 0.01f)
                 transform.forward = lookDir.normalized;
 
@@ -124,21 +129,80 @@ public class CowardEnemyController : MonoBehaviour
             return;
         }
 
+        if (usingPatrolPathfinding)
+        {
+            FollowPatrolPath();
+            return;
+        }
+
+        if (los != null && !los.HasClearPath(wp.transform.position))
+        {
+            CalculatePatrolPath(wp);
+            usingPatrolPathfinding = true;
+            return;
+        }
+
         if (_currentSteeringTarget != wp.transform)
         {
             _currentSteeringTarget = wp.transform;
             steeringAgent.SetTarget(wp.transform);
         }
-
         steeringAgent.MoveToTarget(true);
+    }
+
+    private void CalculatePatrolPath(NavWaypoint destination)
+    {
+        NavWaypoint start = GetClosestWaypoint(transform.position);
+        NavWaypoint end = GetClosestWaypoint(destination.transform.position);
+
+        patrolPath    = WaypointPathfinding.FindPath(start, end);
+        patrolPathIdx = 0;
+
+        if (patrolPath.Count == 0)
+        {
+            usingPatrolPathfinding = false;
+            Debug.LogWarning($"[Coward] No se encontro path de patrulla hacia {destination.name}", this);
+        }
+    }
+
+    private void FollowPatrolPath()
+    {
+        if (patrolPath == null || patrolPathIdx >= patrolPath.Count)
+        {
+            usingPatrolPathfinding = false;
+            return;
+        }
+
+        NavWaypoint node = patrolPath[patrolPathIdx];
+        steeringAgent.SetTarget(node.transform);
+        steeringAgent.MoveToTarget(true);
+
+        if (Vector3.Distance(transform.position, node.transform.position) < waypointReachDistance)
+            patrolPathIdx++;
+    }
+
+    public void CacheSafeWaypoint()
+    {
+        _cachedSafeWaypoint = GetFarthestSafeWaypoint();
+    }
+
+    public bool CanReachSafeDirectly()
+    {
+        if (_cachedSafeWaypoint == null) return false;
+        return los != null && los.HasClearPath(_cachedSafeWaypoint.transform.position);
+    }
+
+    public void RunAwayDirect()
+    {
+        if (_cachedSafeWaypoint == null || steeringAgent == null) return;
+        steeringAgent.SetTarget(_cachedSafeWaypoint.transform);
+        steeringAgent.MoveToTarget(false);
     }
 
     public void RunAway()
     {
         if (target == null) return;
-
         LastKnownPlayerPosition = target.position;
-
         steeringAgent.SetTarget(target);
         steeringAgent.MoveAwayFromTarget();
     }
@@ -146,10 +210,8 @@ public class CowardEnemyController : MonoBehaviour
     public void Attack()
     {
         if (target == null) return;
-
         steeringAgent.SetTarget(target);
         steeringAgent.MoveToTarget(false);
-
         if (DistanceToTarget() <= attackRange)
             GameOver();
     }
@@ -168,15 +230,9 @@ public class CowardEnemyController : MonoBehaviour
 
     public bool IsBlocked()
     {
-        RaycastHit hit;
-
         if (Physics.Raycast(transform.position + Vector3.up * 0.5f,
-            transform.forward, out hit, 1.5f))
-        {
-            if (!hit.collider.CompareTag("Player"))
-                return true;
-        }
-
+            transform.forward, out _, 1.5f))
+            return true;
         return false;
     }
 
@@ -198,19 +254,12 @@ public class CowardEnemyController : MonoBehaviour
     public NavWaypoint GetClosestWaypoint(Vector3 position)
     {
         NavWaypoint closest = null;
-
-        float closestDistance = Mathf.Infinity;
+        float closestDist = Mathf.Infinity;
 
         foreach (NavWaypoint wp in NavigationManager.Instance.allWaypoints)
         {
-            float distance =
-                Vector3.Distance(position, wp.transform.position);
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closest = wp;
-            }
+            float d = Vector3.Distance(position, wp.transform.position);
+            if (d < closestDist) { closestDist = d; closest = wp; }
         }
 
         return closest;
@@ -218,22 +267,15 @@ public class CowardEnemyController : MonoBehaviour
 
     public NavWaypoint GetFarthestSafeWaypoint()
     {
-        if (SafeWaypointManager.Instance == null)
-            return null;
+        if (SafeWaypointManager.Instance == null) return null;
 
         NavWaypoint best = null;
-
-        float farthestDistance = -1f;
+        float farthest = -1f;
 
         foreach (NavWaypoint wp in SafeWaypointManager.Instance.safeWaypoints)
         {
-            float distance = Vector3.Distance(target.position, wp.transform.position);
-
-            if (distance > farthestDistance)
-            {
-                farthestDistance = distance;
-                best = wp;
-            }
+            float d = Vector3.Distance(target.position, wp.transform.position);
+            if (d > farthest) { farthest = d; best = wp; }
         }
 
         return best;
@@ -242,46 +284,28 @@ public class CowardEnemyController : MonoBehaviour
     public void CalculatePath()
     {
         NavWaypoint start = GetClosestWaypoint(transform.position);
+        NavWaypoint safe = _cachedSafeWaypoint != null ? _cachedSafeWaypoint : GetFarthestSafeWaypoint();
 
-        NavWaypoint safe = GetFarthestSafeWaypoint();
+        if (safe == null) { currentPath.Clear(); return; }
 
-        if (safe == null)
-        {
-            currentPath.Clear();
-            return;
-        }
-
-        currentPath = WaypointPathfinding.FindPath(start, safe);
+        currentPath      = WaypointPathfinding.FindPath(start, safe);
+        currentPathIndex = 0;
 
         if (currentPath.Count == 0)
-        {
-            Debug.LogWarning("No path found!");
-        }
-
-        currentPathIndex = 0;
+            Debug.LogWarning("[Coward] No se encontro path hacia safe waypoint.", this);
     }
 
     public void FollowPath()
     {
-        if (currentPath == null)
-            return;
+        if (currentPath == null) return;
+        if (currentPathIndex >= currentPath.Count) return;
 
-        if (currentPathIndex >= currentPath.Count)
-            return;
-
-        NavWaypoint currentNode =
-            currentPath[currentPathIndex];
-
-        steeringAgent.SetTarget(currentNode.transform);
+        NavWaypoint node = currentPath[currentPathIndex];
+        steeringAgent.SetTarget(node.transform);
         steeringAgent.MoveToTarget(true);
 
-        float distance =
-            Vector3.Distance(transform.position, currentNode.transform.position);
-
-        if (distance < waypointReachDistance)
-        {
+        if (Vector3.Distance(transform.position, node.transform.position) < waypointReachDistance)
             currentPathIndex++;
-        }
     }
 
     public bool PathFinished()

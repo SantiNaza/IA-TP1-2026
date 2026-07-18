@@ -35,7 +35,7 @@ RenderSettings:
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
-  m_ReflectionIntensity: 0
+  m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
@@ -1902,6 +1902,7 @@ GameObject:
   - component: {fileID: 154212382}
   - component: {fileID: 154212381}
   - component: {fileID: 154212380}
+  - component: {fileID: 154212387}
   m_Layer: 0
   m_Name: Coward 2
   m_TagString: Untagged
@@ -2094,6 +2095,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 154212378}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &154212387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154212378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc20ee9c161d5054fa696f2a1a86eafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
+  heightOffset: 1.8
+  fontSize: 10
+  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
+  colorAlert: {r: 1, g: 1, b: 0, a: 1}
+  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
+  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
+  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
+  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
+  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &155105557
 GameObject:
   m_ObjectHideFlags: 0
@@ -4592,6 +4616,7 @@ GameObject:
   - component: {fileID: 440193269}
   - component: {fileID: 440193268}
   - component: {fileID: 440193274}
+  - component: {fileID: 440193275}
   m_Layer: 0
   m_Name: Coward
   m_TagString: Untagged
@@ -4781,6 +4806,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CowardDecisionTree
   enemy: {fileID: 440193269}
+--- !u!114 &440193275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440193266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc20ee9c161d5054fa696f2a1a86eafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
+  heightOffset: 1.8
+  fontSize: 10
+  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
+  colorAlert: {r: 1, g: 1, b: 0, a: 1}
+  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
+  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
+  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
+  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
+  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &442670893
 GameObject:
   m_ObjectHideFlags: 0
@@ -6755,6 +6803,7 @@ GameObject:
   - component: {fileID: 595608512}
   - component: {fileID: 595608518}
   - component: {fileID: 595608519}
+  - component: {fileID: 595608520}
   m_Layer: 0
   m_Name: Guard
   m_TagString: Untagged
@@ -6943,6 +6992,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardDecisionTree
   enemy: {fileID: 595608512}
+--- !u!114 &595608520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595608511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc20ee9c161d5054fa696f2a1a86eafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
+  heightOffset: 1.8
+  fontSize: 10
+  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
+  colorAlert: {r: 1, g: 1, b: 0, a: 1}
+  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
+  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
+  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
+  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
+  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &597892676
 GameObject:
   m_ObjectHideFlags: 0
@@ -12350,6 +12422,7 @@ GameObject:
   - component: {fileID: 1298678260}
   - component: {fileID: 1298678265}
   - component: {fileID: 1298678266}
+  - component: {fileID: 1298678267}
   m_Layer: 0
   m_Name: Guard3
   m_TagString: Untagged
@@ -12542,6 +12615,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardDecisionTree
   enemy: {fileID: 1298678260}
+--- !u!114 &1298678267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298678258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc20ee9c161d5054fa696f2a1a86eafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
+  heightOffset: 1.8
+  fontSize: 10
+  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
+  colorAlert: {r: 1, g: 1, b: 0, a: 1}
+  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
+  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
+  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
+  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
+  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1303251069
 GameObject:
   m_ObjectHideFlags: 0
@@ -13000,6 +13096,7 @@ GameObject:
   - component: {fileID: 1353755805}
   - component: {fileID: 1353755810}
   - component: {fileID: 1353755809}
+  - component: {fileID: 1353755811}
   m_Layer: 0
   m_Name: FlockLeader
   m_TagString: Untagged
@@ -13175,6 +13272,29 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &1353755811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353755803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc20ee9c161d5054fa696f2a1a86eafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
+  heightOffset: 1.8
+  fontSize: 10
+  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
+  colorAlert: {r: 1, g: 1, b: 0, a: 1}
+  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
+  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
+  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
+  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
+  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1359066920
 GameObject:
   m_ObjectHideFlags: 0
@@ -17109,6 +17229,7 @@ GameObject:
   - component: {fileID: 1828052902}
   - component: {fileID: 1828052907}
   - component: {fileID: 1828052908}
+  - component: {fileID: 1828052909}
   m_Layer: 0
   m_Name: Guard2
   m_TagString: Untagged
@@ -17297,6 +17418,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardDecisionTree
   enemy: {fileID: 1828052902}
+--- !u!114 &1828052909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828052900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc20ee9c161d5054fa696f2a1a86eafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
+  heightOffset: 1.8
+  fontSize: 10
+  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
+  colorAlert: {r: 1, g: 1, b: 0, a: 1}
+  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
+  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
+  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
+  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
+  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1831003546
 GameObject:
   m_ObjectHideFlags: 0

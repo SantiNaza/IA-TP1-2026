@@ -15,11 +15,14 @@ public class GuardEnemyController : MonoBehaviour
 
     [Header("Movement")]
     public float speed = 2.5f;
-    public float waypointReachDistance = 1.2f;
+    public float waypointReachDistance = 1.5f;
     public float attackRange = 1.2f;
 
     [Header("Idle")]
     public float idleTime = 2f;
+
+    [Header("Alert")]
+    public float lookAroundSpeed = 60f;
 
     private FSM<GuardStateEnum> _fsm;
 
@@ -41,8 +44,10 @@ public class GuardEnemyController : MonoBehaviour
     private int patrolPathIdx = 0;
     private bool usingPatrolPathfinding = false;
 
-    private enum GuardPatrolAction { WAIT, BACK, FORWARD_TWO }
+    private List<NavWaypoint> alertPath = new List<NavWaypoint>();
+    private int alertPathIdx = 0;
 
+    private enum GuardPatrolAction { WAIT, BACK, FORWARD_TWO }
     private RouletteWheelSelector<GuardPatrolAction> _rouletteSelector;
 
     private void Start()
@@ -78,6 +83,7 @@ public class GuardEnemyController : MonoBehaviour
         var patrol = new GuardPatrolState(this);
         var idle = new GuardIdleState(this);
         var chase = new GuardChaseState(this);
+        var alert = new GuardAlertState(this);
         var pathfinding = new GuardPathfindingState(this);
         var attack = new GuardAttackState(this);
 
@@ -87,8 +93,11 @@ public class GuardEnemyController : MonoBehaviour
         idle.AddTransition(GuardStateEnum.Patrol, patrol);
         idle.AddTransition(GuardStateEnum.Chase, chase);
 
-        chase.AddTransition(GuardStateEnum.Pathfinding, pathfinding);
+        chase.AddTransition(GuardStateEnum.Alert, alert);
         chase.AddTransition(GuardStateEnum.Attack, attack);
+
+        alert.AddTransition(GuardStateEnum.Chase, chase);
+        alert.AddTransition(GuardStateEnum.Pathfinding, pathfinding);
 
         pathfinding.AddTransition(GuardStateEnum.Chase, chase);
         pathfinding.AddTransition(GuardStateEnum.Patrol, patrol);
@@ -104,8 +113,7 @@ public class GuardEnemyController : MonoBehaviour
         if (isWaiting) return;
 
         NavWaypoint wp = patrolWaypoints[_currentWaypointIndex];
-
-        Vector3 toWP  = wp.transform.position - transform.position;
+        Vector3 toWP = wp.transform.position - transform.position;
         toWP.y = 0;
 
         if (toWP.magnitude < waypointReachDistance)
@@ -113,8 +121,7 @@ public class GuardEnemyController : MonoBehaviour
             usingPatrolPathfinding = false;
             patrolPath.Clear();
 
-            if (steeringAgent != null)
-                steeringAgent.Stop();
+            if (steeringAgent != null) steeringAgent.Stop();
 
             Vector3 lookDir = wp.transform.position - transform.position;
             lookDir.y = 0;
@@ -165,14 +172,13 @@ public class GuardEnemyController : MonoBehaviour
             return;
         }
 
-        // CASO A: Ya estamos usando pathfinding interno → seguir el path
         if (usingPatrolPathfinding)
         {
             FollowPatrolPath(wp);
             return;
         }
 
-        // CASO B: Chequear Line of Sight al waypoint
+        // Chequear LoS al waypoint
         if (los != null && !los.HasClearPath(wp.transform.position))
         {
             CalculatePatrolPath(wp);
@@ -180,7 +186,7 @@ public class GuardEnemyController : MonoBehaviour
             return;
         }
 
-        // CASO C: Linea libre → Steering directo
+        // Linea libre -> Steering directo
         if (steeringAgent != null)
         {
             if (_currentSteeringTarget != wp.transform)
@@ -195,7 +201,7 @@ public class GuardEnemyController : MonoBehaviour
     private void CalculatePatrolPath(NavWaypoint destination)
     {
         NavWaypoint start = GetClosestWaypoint(transform.position);
-        NavWaypoint end = GetClosestWaypoint(destination.transform.position);
+        NavWaypoint end   = GetClosestWaypoint(destination.transform.position);
 
         patrolPath = WaypointPathfinding.FindPath(start, end);
         patrolPathIdx = 0;
@@ -216,12 +222,53 @@ public class GuardEnemyController : MonoBehaviour
         }
 
         NavWaypoint node = patrolPath[patrolPathIdx];
-
         steeringAgent.SetTarget(node.transform);
         steeringAgent.MoveToTarget(true);
 
         if (Vector3.Distance(transform.position, node.transform.position) < waypointReachDistance)
             patrolPathIdx++;
+    }
+
+    public void CalculateAlertPath()
+    {
+        NavWaypoint start = GetClosestWaypoint(transform.position);
+        NavWaypoint end = GetClosestWaypoint(LastKnownPlayerPosition);
+
+        alertPath = WaypointPathfinding.FindPath(start, end);
+        alertPathIdx = 0;
+
+        if (alertPath.Count == 0)
+            Debug.LogWarning("[Guard] No se encontro path de Alert.", this);
+    }
+
+    public void FollowAlertPath()
+    {
+        if (alertPath == null || alertPathIdx >= alertPath.Count) return;
+
+        NavWaypoint node = alertPath[alertPathIdx];
+        steeringAgent.SetTarget(node.transform);
+        steeringAgent.MoveToTarget(true);
+
+        if (Vector3.Distance(transform.position, node.transform.position) < waypointReachDistance)
+            alertPathIdx++;
+    }
+
+    public bool AlertPathFinished()
+    {
+        return alertPathIdx >= alertPath.Count;
+    }
+
+    public void LookAround()
+    {
+        transform.Rotate(Vector3.up, lookAroundSpeed * Time.deltaTime);
+    }
+
+    public void ChaseTarget()
+    {
+        if (target == null || steeringAgent == null) return;
+        LastKnownPlayerPosition = target.position;
+        steeringAgent.SetTarget(target);
+        steeringAgent.MoveToTarget(false);
     }
 
     IEnumerator WaitAndContinue(float time)
@@ -248,14 +295,6 @@ public class GuardEnemyController : MonoBehaviour
             _currentWaypointIndex = 0;
             _direction = 1;
         }
-    }
-
-    public void ChaseTarget()
-    {
-        if (target == null || steeringAgent == null) return;
-        LastKnownPlayerPosition = target.position;
-        steeringAgent.SetTarget(target);
-        steeringAgent.MoveToTarget(false);
     }
 
     public bool CanSeeTarget()
@@ -288,16 +327,12 @@ public class GuardEnemyController : MonoBehaviour
     public NavWaypoint GetClosestWaypoint(Vector3 position)
     {
         NavWaypoint closest = null;
-        float closestDistance = Mathf.Infinity;
+        float closestDist = Mathf.Infinity;
 
         foreach (NavWaypoint wp in NavigationManager.Instance.allWaypoints)
         {
-            float distance = Vector3.Distance(position, wp.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closest = wp;
-            }
+            float d = Vector3.Distance(position, wp.transform.position);
+            if (d < closestDist) { closestDist = d; closest = wp; }
         }
 
         return closest;
@@ -316,11 +351,11 @@ public class GuardEnemyController : MonoBehaviour
         if (currentPath == null) return;
         if (currentPathIndex >= currentPath.Count) return;
 
-        NavWaypoint currentNode = currentPath[currentPathIndex];
-        steeringAgent.SetTarget(currentNode.transform);
+        NavWaypoint node = currentPath[currentPathIndex];
+        steeringAgent.SetTarget(node.transform);
         steeringAgent.MoveToTarget(true);
 
-        if (Vector3.Distance(transform.position, currentNode.transform.position) < waypointReachDistance)
+        if (Vector3.Distance(transform.position, node.transform.position) < waypointReachDistance)
             currentPathIndex++;
     }
 

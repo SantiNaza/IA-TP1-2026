@@ -11,19 +11,16 @@ public class GuardChaseState : State<GuardStateEnum>
 
     public override void Execute()
     {
-        // pathfinding si no veo al jugador, sino lo persigo. Si lo pierdo, busco por el ultimo lugar donde lo vi.
-        if (!_enemy.CanSeeTarget())
-        {
-            _enemy.TransitionTo(
-                GuardStateEnum.Pathfinding);
-
-            return;
-        }
-
-        // Si el jugador esta cerca, lo agarro y perdio.
         if (_enemy.DistanceToTarget() <= _enemy.attackRange)
         {
             _enemy.TransitionTo(GuardStateEnum.Attack);
+            return;
+        }
+
+        // Si pierde de vista al jugador va a Alert
+        if (!_enemy.CanSeeTarget())
+        {
+            _enemy.TransitionTo(GuardStateEnum.Alert);
             return;
         }
 

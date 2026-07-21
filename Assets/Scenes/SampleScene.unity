@@ -4007,15 +4007,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
   heightOffset: 1.8
   fontSize: 10
-  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
-  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
-  colorAlert: {r: 1, g: 1, b: 0, a: 1}
-  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
-  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
-  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
-  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
-  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &155105557
 GameObject:
   m_ObjectHideFlags: 0
@@ -10230,15 +10221,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
   heightOffset: 1.8
   fontSize: 10
-  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
-  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
-  colorAlert: {r: 1, g: 1, b: 0, a: 1}
-  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
-  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
-  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
-  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
-  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &442670893
 GameObject:
   m_ObjectHideFlags: 0
@@ -13912,6 +13894,7 @@ MonoBehaviour:
   waypointReachDistance: 1.5
   attackRange: 1.2
   idleTime: 1.5
+  lookAroundSpeed: 60
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
   patrolWaypoints:
   - {fileID: 1208555168}
@@ -14090,15 +14073,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
   heightOffset: 1.8
   fontSize: 10
-  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
-  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
-  colorAlert: {r: 1, g: 1, b: 0, a: 1}
-  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
-  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
-  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
-  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
-  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &597925307
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26157,6 +26131,7 @@ MonoBehaviour:
   waypointReachDistance: 1.5
   attackRange: 1.2
   idleTime: 2
+  lookAroundSpeed: 60
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
   patrolWaypoints:
   - {fileID: 1349887915}
@@ -26317,15 +26292,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
   heightOffset: 1.8
   fontSize: 10
-  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
-  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
-  colorAlert: {r: 1, g: 1, b: 0, a: 1}
-  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
-  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
-  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
-  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
-  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1299401303
 GameObject:
   m_ObjectHideFlags: 0
@@ -27811,15 +27777,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
   heightOffset: 1.8
   fontSize: 10
-  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
-  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
-  colorAlert: {r: 1, g: 1, b: 0, a: 1}
-  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
-  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
-  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
-  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
-  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1357430239
 GameObject:
   m_ObjectHideFlags: 0
@@ -37383,6 +37340,7 @@ MonoBehaviour:
   waypointReachDistance: 1.5
   attackRange: 1.2
   idleTime: 1
+  lookAroundSpeed: 60
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
   patrolWaypoints:
   - {fileID: 630106317}
@@ -37546,15 +37504,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCStateLabel
   heightOffset: 1.8
   fontSize: 10
-  colorPatrol: {r: 0.4, g: 0.8, b: 1, a: 1}
-  colorIdle: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  colorChase: {r: 1, g: 0.6, b: 0, a: 1}
-  colorAlert: {r: 1, g: 1, b: 0, a: 1}
-  colorPathfinding: {r: 0.5, g: 0.3, b: 1, a: 1}
-  colorRunAway: {r: 0.3, g: 1, b: 0.4, a: 1}
-  colorSafe: {r: 0.2, g: 0.9, b: 0.5, a: 1}
-  colorAttack: {r: 1, g: 0.15, b: 0.15, a: 1}
-  colorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1828516471 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 657987f19f0767d4f81541198f8e3eff, type: 3}

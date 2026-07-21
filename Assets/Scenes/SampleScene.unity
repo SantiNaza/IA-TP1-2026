@@ -2267,8 +2267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f981f3c127aee0641b6ed3da6c1d9c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
-  maxSpeed: 6
-  slowingDistance: 2
+  maxSpeed: 3
+  slowingDistance: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -2290,7 +2290,7 @@ MonoBehaviour:
   los: {fileID: 1034424818}
   steeringAgent: {fileID: 154212381}
   decisionTree: {fileID: 154212380}
-  waypointReachDistance: 1.2
+  waypointReachDistance: 1.5
   attackRange: 1.2
   trappedDistance: 2.5
   idleTime: 2
@@ -6160,8 +6160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f981f3c127aee0641b6ed3da6c1d9c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
-  maxSpeed: 6
-  slowingDistance: 2
+  maxSpeed: 3
+  slowingDistance: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -6183,7 +6183,7 @@ MonoBehaviour:
   los: {fileID: 947929079}
   steeringAgent: {fileID: 440193268}
   decisionTree: {fileID: 440193274}
-  waypointReachDistance: 1.2
+  waypointReachDistance: 1.5
   attackRange: 1.2
   trappedDistance: 2.5
   idleTime: 2
@@ -7090,37 +7090,89 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavigationManager
   allWaypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 125847709}
+  - {fileID: 930707725}
+  - {fileID: 1734430174}
+  - {fileID: 1960114926}
+  - {fileID: 2138695187}
+  - {fileID: 630106317}
+  - {fileID: 1310439351}
+  - {fileID: 1472957865}
+  - {fileID: 386404936}
+  - {fileID: 1989515038}
+  - {fileID: 226283591}
+  - {fileID: 461936880}
+  - {fileID: 1287647833}
+  - {fileID: 906357140}
+  - {fileID: 447183620}
+  - {fileID: 1990835580}
+  - {fileID: 1169675444}
+  - {fileID: 1339100953}
+  - {fileID: 238307165}
+  - {fileID: 1850922747}
+  - {fileID: 843382195}
+  - {fileID: 345242307}
+  - {fileID: 1835413861}
+  - {fileID: 1591555259}
+  - {fileID: 1010662335}
+  - {fileID: 424380691}
+  - {fileID: 576852037}
+  - {fileID: 2046518932}
+  - {fileID: 1916133353}
+  - {fileID: 780410495}
+  - {fileID: 1349887915}
+  - {fileID: 1774999034}
+  - {fileID: 289434508}
+  - {fileID: 55296884}
+  - {fileID: 1031305651}
+  - {fileID: 417020385}
+  - {fileID: 547668169}
+  - {fileID: 13770792}
+  - {fileID: 316409294}
+  - {fileID: 294065198}
+  - {fileID: 672271032}
+  - {fileID: 758534571}
+  - {fileID: 2143047592}
+  - {fileID: 2103936892}
+  - {fileID: 360129667}
+  - {fileID: 324362049}
+  - {fileID: 1273201478}
+  - {fileID: 1344749763}
+  - {fileID: 1720452379}
+  - {fileID: 1119050686}
+  - {fileID: 1722793481}
+  - {fileID: 1811655887}
+  - {fileID: 973702776}
+  - {fileID: 1855640569}
+  - {fileID: 416730287}
+  - {fileID: 1208555168}
+  - {fileID: 1498139819}
+  - {fileID: 896679232}
+  - {fileID: 762394929}
+  - {fileID: 2133741285}
+  - {fileID: 1192437919}
+  - {fileID: 1770926759}
+  - {fileID: 1856476510}
+  - {fileID: 1222718131}
+  - {fileID: 1646864303}
+  - {fileID: 1873845066}
+  - {fileID: 2035605342}
+  - {fileID: 806142429}
+  - {fileID: 395358498}
+  - {fileID: 796971376}
+  - {fileID: 456362337}
+  - {fileID: 162039565}
+  - {fileID: 2024010610}
+  - {fileID: 1043471403}
+  - {fileID: 687787105}
+  - {fileID: 1450101832}
+  - {fileID: 1861734872}
+  - {fileID: 1239130991}
+  - {fileID: 1626388574}
+  - {fileID: 147992065}
+  - {fileID: 105370683}
+  - {fileID: 2057557286}
+  - {fileID: 1357430241}
 --- !u!4 &486043813
 Transform:
   m_ObjectHideFlags: 0
@@ -8446,8 +8498,8 @@ MonoBehaviour:
   los: {fileID: 1529742714}
   steeringAgent: {fileID: 595608518}
   decisionTree: {fileID: 595608519}
-  speed: 2.5
-  waypointReachDistance: 1.2
+  speed: 3
+  waypointReachDistance: 1.5
   attackRange: 1.2
   idleTime: 1.5
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
@@ -8594,8 +8646,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f981f3c127aee0641b6ed3da6c1d9c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
-  maxSpeed: 5
-  slowingDistance: 2
+  maxSpeed: 3
+  slowingDistance: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -15339,7 +15391,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeWaypointManager
   safeWaypoints:
-  - {fileID: 0}
+  - {fileID: 316409294}
+  - {fileID: 1856476510}
 --- !u!4 &1186296280
 Transform:
   m_ObjectHideFlags: 0
@@ -16431,8 +16484,8 @@ MonoBehaviour:
   los: {fileID: 1129208605}
   steeringAgent: {fileID: 1298678265}
   decisionTree: {fileID: 1298678266}
-  speed: 2.5
-  waypointReachDistance: 1.2
+  speed: 3
+  waypointReachDistance: 1.5
   attackRange: 1.2
   idleTime: 2
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
@@ -16561,8 +16614,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f981f3c127aee0641b6ed3da6c1d9c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
-  maxSpeed: 5
-  slowingDistance: 2
+  maxSpeed: 3
+  slowingDistance: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -22458,8 +22511,8 @@ MonoBehaviour:
   los: {fileID: 1115763294}
   steeringAgent: {fileID: 1828052907}
   decisionTree: {fileID: 1828052908}
-  speed: 2.5
-  waypointReachDistance: 1.2
+  speed: 3
+  waypointReachDistance: 1.5
   attackRange: 1.2
   idleTime: 1
   LastKnownPlayerPosition: {x: 0, y: 0, z: 0}
@@ -22591,8 +22644,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f981f3c127aee0641b6ed3da6c1d9c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteeringAgent
-  maxSpeed: 5
-  slowingDistance: 2
+  maxSpeed: 3
+  slowingDistance: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64

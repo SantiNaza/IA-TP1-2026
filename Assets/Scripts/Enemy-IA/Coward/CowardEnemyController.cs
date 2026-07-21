@@ -37,8 +37,6 @@ public class CowardEnemyController : MonoBehaviour
     private int patrolPathIdx = 0;
     private bool usingPatrolPathfinding = false;
 
-    private NavWaypoint _cachedSafeWaypoint;
-
     private void Start()
     {
         InitializeFSM();
@@ -181,24 +179,6 @@ public class CowardEnemyController : MonoBehaviour
             patrolPathIdx++;
     }
 
-    public void CacheSafeWaypoint()
-    {
-        _cachedSafeWaypoint = GetFarthestSafeWaypoint();
-    }
-
-    public bool CanReachSafeDirectly()
-    {
-        if (_cachedSafeWaypoint == null) return false;
-        return los != null && los.HasClearPath(_cachedSafeWaypoint.transform.position);
-    }
-
-    public void RunAwayDirect()
-    {
-        if (_cachedSafeWaypoint == null || steeringAgent == null) return;
-        steeringAgent.SetTarget(_cachedSafeWaypoint.transform);
-        steeringAgent.MoveToTarget(false);
-    }
-
     public void RunAway()
     {
         if (target == null) return;
@@ -284,11 +264,11 @@ public class CowardEnemyController : MonoBehaviour
     public void CalculatePath()
     {
         NavWaypoint start = GetClosestWaypoint(transform.position);
-        NavWaypoint safe = _cachedSafeWaypoint != null ? _cachedSafeWaypoint : GetFarthestSafeWaypoint();
+        NavWaypoint safe = GetFarthestSafeWaypoint();
 
         if (safe == null) { currentPath.Clear(); return; }
 
-        currentPath      = WaypointPathfinding.FindPath(start, safe);
+        currentPath = WaypointPathfinding.FindPath(start, safe);
         currentPathIndex = 0;
 
         if (currentPath.Count == 0)

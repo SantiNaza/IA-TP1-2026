@@ -24,7 +24,7 @@ public class Arrive : ISteering
         float distance = dir.magnitude;
 
         // Si ya llegamos, devolvemos 0 para que frene
-        if (distance <= 1f)
+        if (distance <= 1.5f)
             return Vector3.zero;
 
         float rampedSpeed = _maxSpeed * (distance / _slowingDistance);
